@@ -12,6 +12,7 @@
 
 struct lentry {
 	char lstatus;
+	int ltype;
 	int lqhead;
 	int lqtail;
 	int proc_list[NPROC];

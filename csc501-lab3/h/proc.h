@@ -46,6 +46,7 @@ struct	pentry	{
 	int	pesp;			/* saved stack pointer		*/
 	STATWORD pirmask;		/* saved interrupt mask		*/
 	int	psem;			/* semaphore if process waiting	*/
+	int plock;			/* lock if process waiting */
 	WORD	pmsg;			/* message sent to this process	*/
 	char	phasmsg;		/* nonzero iff pmsg is valid	*/
 	WORD	pbase;			/* base of run time stack	*/
