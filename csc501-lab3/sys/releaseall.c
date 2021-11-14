@@ -7,6 +7,9 @@
 #include <stdio.h>
 #include <lock.h>
 
-int releaseall(int numlocks) {
+int releaseall(int numlocks, int ldesc1) {
+
+
+
 	return OK;
 }

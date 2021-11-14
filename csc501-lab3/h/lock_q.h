@@ -32,5 +32,7 @@ extern int enqueue_l(int item, int tail);
 extern int dequeue_l(int item);
 extern int newqueue_l();
 extern int insert_lq(int proc, int head, int key, int ltype);
+extern int getfirst_l(int head);
+extern int getlast_l(int tail);
 
 #endif

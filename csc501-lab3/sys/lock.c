@@ -75,7 +75,7 @@ int is_writer_waiting(int lockdescriptor, int priority) {
 void make_process_wait(int pid, int lockdescriptor) {
 	struct pentry* ptr;
 	ptr = &proctab[pid];
-	*ptr->pstate = PRWAIT;
-	*ptr->plock = lockdescriptor;
+	ptr->pstate = PRWAIT;
+	ptr->plock = lockdescriptor;
 	return;
 }
