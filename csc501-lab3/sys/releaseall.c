@@ -7,12 +7,12 @@
 #include <lock.h>
 #include <lock_q.h>
 
-int releaseall(int numlocks, int ldesc1) {
+int releaseall(int numlocks, int ldesc1) { // variable argument validation with numlocks is pending!
 
 	STATWORD ps;
 	disable(ps);
 
-	int l_index, reader, writer, *lock, ltype, temp, waitprio, q_head;
+	int l_index, reader, writer, *lock, ltype, temp, waitprio, q_head, r_waittime, w_waittime;
 	int pid = currpid;
 	struct lentry* lptr;
 	lock = &ldesc1;
@@ -41,7 +41,7 @@ int releaseall(int numlocks, int ldesc1) {
 			
 			int result;
 			get_last_in_queue(*lock, &result);
-			if (result != -1) { // if -1 no entries in the lock's queue
+			if (result != -1) { // if -1 no entries in the lock's queue, moving on.
 				if (q_l[result].qtype == WRITE) {
 					acquire_lock(result, *lock, WRITE);
 				}
@@ -49,8 +49,8 @@ int releaseall(int numlocks, int ldesc1) {
 					get_type(*lock, &writer, WRITE);
 					if (writer != -1) { // there is a writer existing in the queue
 						if (q_l[result].qkey == q_l[writer].qkey) { /* writer and reader has same priority*/
-							int r_waittime = ctr1000 - q_l[result].qkey;
-							int w_waittime = ctr1000 - q_l[writer].qkey;
+							r_waittime = ctr1000 - q_l[result].qkey;
+							w_waittime = ctr1000 - q_l[writer].qkey;
 							if ((w_waittime - r_waittime) < 1000) {
 								// a writer has arrived within a second, writer acquring lock
 								acquire_lock(writer, *lock, WRITE);
@@ -59,8 +59,8 @@ int releaseall(int numlocks, int ldesc1) {
 								temp = result;
 								waitprio = q_l[result].qkey;
 								while (q_l[temp].qkey == waitprio && temp!= q_head) {
-									int r_waittime = ctr1000 - q_l[temp].qkey;
-									int w_waittime = ctr1000 - q_l[writer].qkey;
+									r_waittime = ctr1000 - q_l[temp].qkey;
+									w_waittime = ctr1000 - q_l[writer].qkey;
 									if ((w_waittime - r_waittime) > 1000) {
 										acquire_lock(temp, *lock, READ);
 									}
