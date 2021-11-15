@@ -15,15 +15,18 @@ int ldelete(int lockdescriptor) {
 		return SYSERR;
 	}
 
+	struct pentry* pptr;
 	struct lentry* lock_ptr = &locks[lockdescriptor];
 
 	lock_ptr->lstatus = LFREE;
+	lock_ptr->is_deleted = 1; 
 	
 
 	for (proc_index = 0; proc_index < NPROC; proc_index++) { // clearing the processes 
 		if (lock_ptr->proc_list[proc_index]) {
 			lock_ptr->proc_list[proc_index] = 0;
-			//locks held pending
+			pptr = &proctab[proc_index];
+			pptr->plused[lockdescriptor] = PLDEL; /* the lock being used got deleted */
 		}
 	}
 

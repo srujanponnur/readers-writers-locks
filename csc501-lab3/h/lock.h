@@ -18,6 +18,7 @@ struct lentry {
 	int proc_list[NPROC];
 	int reader_count;
 	int is_writer;
+	int is_deleted;
 };
 
 
@@ -31,6 +32,9 @@ extern int lcreate(void);
 extern int lock(int, int, int);
 extern int newlockid(void);
 extern int ldelete(int);
-extern int releaseall(int);
-
+extern int releaseall(int, int);
+extern void get_last_in_queue(int, int*);
+extern void get_type(int, int*, int);
+extern int check_process_locks(int, int);
+extern void acquire_lock(int, int, int);
 #endif

@@ -16,6 +16,10 @@
 #define	FDFREE		-1		/* free file descriptor */
 #define PRFREE		'\002'          /* process slot is free         */
 
+#define PLUSED 1  /* Process has used this lock in its life cycle*/
+#define PLDEL -1 /* Process had used the lock before but currently deleted */
+#define PLUNUSED 0 /* Process never acquired the lock*/
+
 
 /* process state constants */
 
@@ -59,6 +63,7 @@ struct	pentry	{
 	Bool	ptcpumode;		/* proc is in TCP urgent mode	*/
 	short	pdevs[2];		/* devices to close upon exit	*/
 	int	fildes[_NFILE];		/* file - device translation	*/
+	int plused[50];		/* used locks in the process life cycle*/
 	int	ppagedev;		/* pageing dgram device		*/
 	int	pwaitret;
 };

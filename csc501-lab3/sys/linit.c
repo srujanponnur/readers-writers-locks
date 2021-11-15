@@ -17,6 +17,7 @@ void linit() {
 		}
 		locks[lock_index].readerCount = 0;
 		locks[lock_index].is_writer = 0;
+		locks[lock_index].is_deleted = 0; /* was this lock ever got deleted?*/
 	}
 	return;
 }

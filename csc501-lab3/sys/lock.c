@@ -1,25 +1,31 @@
 #include <conf.h>
 #include <kernel.h>
 #include <proc.h>
-#include <lock_q.h>
 #include <sem.h>
 #include <stdio.h>
 #include <lock.h>
-
+#include <lock_q.h>
 
 int lock(int lockdescriptor, int type, int priority) {
 
 	STATWORD ps;
 	disable(ps);
-
-	if (isbadlock(lockdescriptor) || locks[lockdescriptor].lstatus == LFREE) { // either bad lock descriptor or the lock has not been created yet.
+	
+	if (isbadlock(lockdescriptor) || locks[lockdescriptor].lstatus == LFREE || (type != READ || type != WRITE)) { // either bad lock descriptor or the lock has not been created yet.
 		restore(ps);
 		return SYSERR;
 	}
-	else if (type != READ || type != WRITE) {
+
+	struct pentry* ptr;
+	ptr = &proctab[currpid];
+	int is_deleted = locks[lockdescriptor].is_deleted;
+	
+	if((ptr->plused[lockdescriptor] == PLUSED || ptr->plused[lockdescriptor] == PLDEL) && is_deleted)  { // this lock was recreated but old lock was used by this process
 		restore(ps);
 		return SYSERR
-	}
+	} 
+	
+	ptr->plused[lockdescriptor] = PLUSED;
 
 	if (locks[lockdescriptor].lstatus == LINIT) { // lock has been created but not used
 
