@@ -81,7 +81,7 @@ int is_writer_waiting(int lockdescriptor, int priority) {
 void set_priority_inheritance(int pid) {
 	struct pentry* pptr, *wpptr;
 	struct lentry* lptr;
-	int prio,inh_prio,l_index,proc_index,curr,max_prio;
+	int prio,l_index,proc_index,curr,max_prio;
 	pptr = &proctab[pid];
 	for (l_index = 0; l_index < NLOCKS; l_index++) {
 		lptr = &locks[l_index];
@@ -106,8 +106,6 @@ void set_priority_inheritance(int pid) {
 		lptr->lprio = (lptr->lprio > prio) ? lptr->lprio : prio; // since process's priority is being increased, change the max priority in queue
 		for (proc_index = 0; proc_index < NPROC; proc_index++) {
 			if (lptr->proc_list[proc_index]) {
-				wpptr = &proctab[proc_index];
-				inh_prio = wpptr->pinh != 0 ? wpptr->pinh : wpptr->pprio;
 				set_priority_inheritance(proc_index);
 			}
 		}

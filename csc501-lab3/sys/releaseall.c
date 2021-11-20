@@ -37,7 +37,7 @@ int releaseall(int numlocks, int ldesc1) { // variable argument validation with 
 			lptr->is_writer = 0;
 		}
 
-		if ((type == WRITE && lptr->is_writer == 0) || (type == READ && lptr->reader_count == 0)) {
+		if ((ltype == WRITE && lptr->is_writer == 0) || (ltype == READ && lptr->reader_count == 0)) {
 			
 			int result;
 			get_last_in_queue(*lock, &result);
