@@ -111,7 +111,7 @@ void acquire_lock(int result, int lockdescriptor, int type) {
 	else {
 		lptr->is_writer = 1;
 	}
-	dequeue_l(result);
+	dequeue(result);
 	lptr->lprio = get_max_in_queue(lockdescriptor);
 	ready(result, RESCHNO);
 	return;

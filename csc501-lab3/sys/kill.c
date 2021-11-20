@@ -8,7 +8,7 @@
 #include <io.h>
 #include <q.h>
 #include <lock.h>
-#include <lock_q.h>
+#include <q.h>
 #include <stdio.h>
 
 /*------------------------------------------------------------------------
@@ -49,7 +49,7 @@ SYSCALL kill(int pid)
 			resched();
 
 	case PRWAIT:	semaph[pptr->psem].semcnt++;
-		dequeue_l(pid);
+		dequeue(pid);
 		if (pptr->plock != -1) {
 			lptr = &locks[pptr->plock];
 			lptr->lprio = get_max_in_queue(pptr->plock);

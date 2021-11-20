@@ -5,7 +5,7 @@
 #include <proc.h>
 #include <q.h>
 #include <lock.h>
-#include <lock_q.h>
+#include <q.h>
 #include <stdio.h>
 
 /*------------------------------------------------------------------------

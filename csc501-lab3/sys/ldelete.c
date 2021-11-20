@@ -36,7 +36,7 @@ int ldelete(int lockdescriptor) {
 		{
 			proctab[pid].pwaitret = DELETED;
 			ready(pid, RESCHNO);
-			pid = getfirst_l(lock_ptr->lqhead);
+			pid = getfirst(lock_ptr->lqhead);
 		}
 		resched();
 	}
