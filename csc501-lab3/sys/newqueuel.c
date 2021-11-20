@@ -11,12 +11,12 @@
  */
 int newqueue_l()
 {
-	struct	qent* hptr;
-	struct	qent* tptr;
+	struct	qent *hptr;
+	struct	qent *tptr;
 	int	hindex, tindex;
 
-	hptr = &q_l[hindex = nextqueue_l++]; /* assign and rememeber queue	*/
-	tptr = &q_l[tindex = nextqueue_l++]; /* index values for head&tail	*/
+	hptr = &q_l[hindex=nextqueue_l++]; /* assign and rememeber queue	*/
+	tptr = &q_l[tindex=nextqueue_l++]; /* index values for head&tail	*/
 	hptr->qnext = tindex;
 	hptr->qprev = EMPTY;
 	hptr->qkey = MININT;
