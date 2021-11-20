@@ -25,6 +25,7 @@ struct lentry {
 
 extern struct lentry locks[];
 extern int nextlock;
+extern unsigned long ctr1000;
 
 #define	isbadlock(l)	(l<0 || l>=NLOCKS)
 
