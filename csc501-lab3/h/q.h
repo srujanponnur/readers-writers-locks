@@ -6,7 +6,7 @@
 /* q structure declarations, constants, and inline procedures		*/
 
 #ifndef	NQENT
-#define	NQENT  NPROC + NSEM + NSEM  + 4	/* for ready & sleep	*/
+#define	NQENT  NPROC + NSEM + NSEM  + NLOCKS + NLOCKS + 4	/* for ready & sleep	*/
 #endif
 
 struct	qent	{		/* one for each process plus two for	*/
@@ -14,6 +14,8 @@ struct	qent	{		/* one for each process plus two for	*/
 	int	qkey;		/* key on which the queue is ordered	*/
 	int	qnext;		/* pointer to next process or tail	*/
 	int	qprev;		/* pointer to previous process or head	*/
+	int qtype;      /* this is the type of the lock in the queue*/
+	unsigned long added_at; /*when this entry was made*/
 };
 
 extern	struct	qent q[];
@@ -33,6 +35,8 @@ extern	int	nextqueue;
 #define	QF_NOWAIT	1	/* use disable/restore to mutex		*/
 
 /* ANSI compliant function prototypes */
+
+extern int insert_lq(int proc, int head, int key, int ltype);
 
 int enqueue(int item, int tail);
 int dequeue(int item);

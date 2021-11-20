@@ -4,7 +4,7 @@
 #include <sem.h>
 #include <stdio.h>
 #include <lock.h>
-#include <lock_q.h>
+#include <q.h>
 
 int lock(int lockdescriptor, int type, int priority) {
 
@@ -65,15 +65,15 @@ int lock(int lockdescriptor, int type, int priority) {
 
 int is_writer_waiting(int lockdescriptor, int priority) {
 	int qtail = locks[lockdescriptor].lqtail;
-	int last = q_l[qtail].qprev;
+	int last = q[qtail].qprev;
 	int qhead = locks[lockdescriptor].lqhead;
 	int should_wait = 0;
 	while (last != qhead) {
-		if (q_l[last].qtype == WRITE && q_l[last].qkey > priority) {
+		if (q[last].qtype == WRITE && q[last].qkey > priority) {
 			should_wait = 1;
 			break;
 		}
-		last = q_l[last].qprev;
+		last = q[last].qprev;
 	}
 	return should_wait;
 }

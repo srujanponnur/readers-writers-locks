@@ -1,10 +1,10 @@
 #include <conf.h>
 #include <kernel.h>
 #include <proc.h>
-#include <lock_q.h>
 #include <sem.h>
 #include <stdio.h>
 #include <lock.h>
+#include <q.h>
 
 int ldelete(int lockdescriptor) {
 	STATWORD ps;
@@ -30,8 +30,8 @@ int ldelete(int lockdescriptor) {
 		}
 	}
 
-	if (nonempty_l(lock_ptr->lqhead)) {
-		int pid = getfirst_l(lock_ptr->lqhead);
+	if (nonempty(lock_ptr->lqhead)) {
+		int pid = getfirst(lock_ptr->lqhead);
 		while (pid != EMPTY)
 		{
 			proctab[pid].pwaitret = DELETED;

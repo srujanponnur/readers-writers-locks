@@ -11,7 +11,6 @@
 #include <mem.h>
 #include <tty.h>
 #include <lock.h>
-#include <lock_q.h>
 #include <q.h>
 #include <io.h>
 #include <stdio.h>
@@ -39,8 +38,6 @@ struct lentry locks[NLOCKS];
 int nextlock;
 struct	qent	q[NQENT];	/* q table (see queue.c)		*/
 int	nextqueue;		/* next slot in q structure to use	*/
-struct qent_l q_l[NLOCKQENT];
-int nextqueue_l;
 char	*maxaddr;		/* max memory address (set by sizmem)	*/
 struct	mblock	memlist;	/* list of free memory blocks		*/
 #ifdef	Ntty
@@ -141,7 +138,6 @@ LOCAL int sysinit()
 	nextsem = NSEM-1;
 	nextqueue = NPROC;		/* q[0..NPROC-1] are processes */
 	nextlock = NLOCKS - 1;
-	nextqueue_l = NLOCKS;
 
 	/* initialize free memory list */
 	/* PC version has to pre-allocate 640K-1024K "hole" */
