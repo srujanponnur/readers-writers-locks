@@ -11,8 +11,8 @@
  */
 int newqueue_l()
 {
-	struct	qent *hptr;
-	struct	qent *tptr;
+	struct	qent_l *hptr;
+	struct	qent_l *tptr;
 	int	hindex, tindex;
 
 	hptr = &q_l[hindex=nextqueue_l++]; /* assign and rememeber queue	*/
