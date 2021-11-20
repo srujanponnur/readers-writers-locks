@@ -22,7 +22,7 @@ int lock(int lockdescriptor, int type, int priority) {
 	
 	if((ptr->plused[lockdescriptor] == PLUSED || ptr->plused[lockdescriptor] == PLDEL) && is_deleted)  { // this lock was recreated but old lock was used by this process
 		restore(ps);
-		return SYSERR
+		return SYSERR;
 	} 
 	
 	ptr->plused[lockdescriptor] = PLUSED;
@@ -67,10 +67,10 @@ int is_writer_waiting(int lockdescriptor, int priority) {
 	int qtail = locks[lockdescriptor].lqtail;
 	int last = q_l[qtail].qprev;
 	int qhead = locks[lockdescriptor].lqhead;
-	int should_wait = false;
+	int should_wait = 0;
 	while (last != qhead) {
 		if (q_l[last].qtype == WRITE && q_l[last].qkey > priority) {
-			should_wait = true;
+			should_wait = 1;
 			break;
 		}
 		last = q_l[last].qprev;
@@ -81,20 +81,20 @@ int is_writer_waiting(int lockdescriptor, int priority) {
 void set_priority_inheritance(int pid) {
 	struct pentry* pptr, *wpptr;
 	struct lentry* lptr;
-	int prio,inh_prio,l_index,proc_index,curr,max_prio,l_index;
+	int prio,inh_prio,l_index,proc_index,curr,max_prio;
 	pptr = &proctab[pid];
 	for (l_index = 0; l_index < NLOCKS; l_index++) {
 		lptr = &locks[l_index];
 		if (lptr->proc_list[pid]) {
 			curr = lptr->lprio;
-			if (max_prio == NULL || curr > max) {
+			if (max_prio == NULL || curr > max_prio) {
 				max_prio = curr;
 			}
 		}
 	}
 
 	if (max == NULL) {
-		pptr->pinh = 0
+		pptr->pinh = 0;
 	}
 	else {
 		pptr->pinh = max_prio;
