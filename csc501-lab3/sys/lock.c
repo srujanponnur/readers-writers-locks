@@ -28,7 +28,7 @@ int lock(int lockdescriptor, int type, int priority) {
 	ptr->plused[lockdescriptor] = PLUSED;
 
 	if (locks[lockdescriptor].lstatus == LINIT) { // lock has been created but not used
-
+		kprintf("Coming inside linit\n");
 		locks[lockdescriptor].lstatus = LUSED;
 		locks[lockdescriptor].ltype = type;
 		if (type == WRITE) {
@@ -41,7 +41,7 @@ int lock(int lockdescriptor, int type, int priority) {
 	}
 
     else if (locks[lockdescriptor].lstatus == LUSED) { // either read or write lock has been acquired
-
+		kprintf("Coming inside lused\n");
 		if (type == WRITE) {
 			make_process_wait(currpid, lockdescriptor, WRITE, priority);
 			resched();
