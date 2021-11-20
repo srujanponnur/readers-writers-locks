@@ -8,7 +8,7 @@
 
 void linit() {
 	int lock_index, proc_index;
-	for (int lock_index = 0; lock_index < NLOCKS; lock_index++) {
+	for (lock_index = 0; lock_index < NLOCKS; lock_index++) {
 		locks[lock_index].lstatus = LFREE;
 		locks[lock_index].ltype = -1;
 		locks[lock_index].lqtail = 1 + (locks[lock_index].lqhead = newqueue_l());
