@@ -75,7 +75,7 @@ int is_writer_waiting(int lockdescriptor, int priority) {
 		}
 		last = q_l[last].qprev;
 	}
-	return shoud_wait;
+	return should_wait;
 }
 
 void set_priority_inheritance(int pid) {
@@ -93,7 +93,7 @@ void set_priority_inheritance(int pid) {
 		}
 	}
 
-	if (max == NULL) {
+	if (max_prio == NULL) {
 		pptr->pinh = 0;
 	}
 	else {
@@ -102,7 +102,7 @@ void set_priority_inheritance(int pid) {
 
 	if (pptr->plock != -1) {
 		lptr = &locks[pptr->plock];
-		prio = ptr->pinh != 0 ? ptr->pinh : ptr->pprio;
+		prio = pptr->pinh != 0 ? pptr->pinh : pptr->pprio;
 		lptr->lprio = (lptr->lprio > prio) ? lptr->lprio : prio; // since process's priority is being increased, change the max priority in queue
 		for (proc_index = 0; proc_index < NPROC; proc_index++) {
 			if (lptr->proc_list[proc_index]) {
