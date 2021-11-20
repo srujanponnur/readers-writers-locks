@@ -24,8 +24,8 @@ int insert_lq(int proc, int head, int key, int ltype) {
 
 
 int enqueue_l(int item, int tail) {
-	struct	qent* tptr;		/* points to tail entry		*/
-	struct	qent* mptr;		/* points to item entry		*/
+	struct	qent_l* tptr;		/* points to tail entry		*/
+	struct	qent_l* mptr;		/* points to item entry		*/
 
 	tptr = &q_l[tail];
 	mptr = &q_l[item];
@@ -38,7 +38,7 @@ int enqueue_l(int item, int tail) {
 
 
 int dequeue_l(int item) {
-	struct	qent* mptr;		/* pointer to q_l entry for item	*/
+	struct	qent_l* mptr;		/* pointer to q_l entry for item	*/
 
 	mptr = &q_l[item];
 	q_l[mptr->qprev].qnext = mptr->qnext;
