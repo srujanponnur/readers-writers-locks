@@ -1,6 +1,7 @@
 #include <conf.h>
 #include <kernel.h>
 #include <proc.h>
+#include <lock.h>
 #include <lock_q.h>
 
 int insert_lq(int proc, int head, int key, int ltype) {
