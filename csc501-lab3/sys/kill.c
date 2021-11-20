@@ -7,6 +7,8 @@
 #include <mem.h>
 #include <io.h>
 #include <q.h>
+#include <lock.h>
+#include <lock_q.h>
 #include <stdio.h>
 
 /*------------------------------------------------------------------------
@@ -17,7 +19,8 @@ SYSCALL kill(int pid)
 {
 	STATWORD ps;    
 	struct	pentry	*pptr;		/* points to proc. table for pid*/
-	int	dev;
+	struct lentry* lptr;
+	int	dev, proc_index;
 
 	disable(ps);
 	if (isbadpid(pid) || (pptr= &proctab[pid])->pstate==PRFREE) {
@@ -46,6 +49,16 @@ SYSCALL kill(int pid)
 			resched();
 
 	case PRWAIT:	semaph[pptr->psem].semcnt++;
+		dequeue_l(pid);
+		if (pptr->plock != -1) {
+			lptr = &locks[pptr->plock];
+			lptr->lprio = get_max_in_queue(pptr->plock);
+			for (proc_index = 0; proc_index < NPROC; proc_index++) {
+				if (lptr->proc_list[proc_index]) {
+					set_priority_inheritance(proc_index);
+				}
+			}
+		}
 
 	case PRREADY:	dequeue(pid);
 			pptr->pstate = PRFREE;

@@ -91,7 +91,8 @@ int releaseall(int numlocks, int ldesc1) { // variable argument validation with 
 
 		lock++;
 	}
-
+	reset_inherited_priority(pid);
+	restore(ps);
 	return OK;
 }
 
@@ -111,8 +112,67 @@ void acquire_lock(int result, int lockdescriptor, int type) {
 		lptr->is_writer = 1;
 	}
 	dequeue_l(result);
+	lptr->lprio = get_max_in_queue(lockdescriptor);
 	ready(result, RESCHNO);
 	return;
+}
+
+void reset_inherited_priority(int pid) {
+	STATWORD ps;
+	disable(ps);
+	struct pentry* pptr;
+	struct lentry* lptr;
+	int l_index, proc_index, curr, max, tail, head, last;
+	max = NULL;
+	pptr = &proctab[pid];
+	for (l_index; l_index < NLOCKS; l_index++) {
+		lptr = &locks[l_index];
+		if (lptr->proc_list[pid]) {
+			tail = lptr->lqtail;
+			head = lptr->lqhead;
+			if (nonempty_l(head)) {
+				last = q_l[tail].qprev;
+				while (last != head) {
+					curr = q_l[last].qkey;
+					if (max == NULL || curr > max) {
+						max = curr;
+					}
+					last = q_l[last].qkey;
+				}
+				
+			}
+		}
+	}
+
+	if (max == NULL) {
+		pptr->pinh = 0;
+	}
+	else {
+		pptr->pinh = max;
+	}
+
+	restore(ps);
+	return;
+}
+
+int get_max_in_queue(int lock) {
+	struct lentry* lptr;
+	struct pentry* pptr;
+	int last,curr,max, head, tail;
+	max = NULL;
+	lptr = &locks[lock];
+	head = lptr->lqhead;
+	tail = lptr->lqtail;
+	last = q_l[tail].qprev;
+	while (last != head) {
+		pptr = &proctab[last];
+		curr = pptr->pinh != 0 ? pptr->pinh : pptr->pprio;;
+		if (max == NULL || curr > max) {
+			max = curr;
+		}
+		last = q_l[last].qprev;
+	}
+	return max;
 }
 
 void get_last_in_queue(int lockdescriptor, int *result) {

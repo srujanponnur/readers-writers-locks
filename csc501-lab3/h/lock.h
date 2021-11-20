@@ -13,6 +13,7 @@
 struct lentry {
 	char lstatus;
 	int ltype;
+	int lprio;
 	int lqhead;
 	int lqtail;
 	int proc_list[NPROC];
@@ -33,8 +34,13 @@ extern int lock(int, int, int);
 extern int newlockid(void);
 extern int ldelete(int);
 extern int releaseall(int, int);
+extern int get_max_in_queue(int);
 extern void get_last_in_queue(int, int*);
 extern void get_type(int, int*, int);
 extern int check_process_locks(int, int);
 extern void acquire_lock(int, int, int);
+extern int is_writer_waiting(int, int);
+extern void set_priority_inheritance(int);
+extern void reset_inherited_priority(int);
+extern void make_process_wait(int, int, int, int);
 #endif

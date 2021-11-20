@@ -47,6 +47,7 @@
 struct	pentry	{
 	char	pstate;			/* process state: PRCURR, etc.	*/
 	int	pprio;			/* process priority		*/
+	int pinh;
 	int	pesp;			/* saved stack pointer		*/
 	STATWORD pirmask;		/* saved interrupt mask		*/
 	int	psem;			/* semaphore if process waiting	*/

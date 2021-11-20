@@ -43,12 +43,12 @@ int lock(int lockdescriptor, int type, int priority) {
     else if (locks[lockdescriptor].lstatus == LUSED) { // either read or write lock has been acquired
 
 		if (type == WRITE) {
-			make_process_wait(currpid, lockdescriptor);
+			make_process_wait(currpid, lockdescriptor, WRITE, priority);
 			resched();
 		}
 		else {
 			if ((locks[lockdescriptor].ltype == WRITE || locks[lockdescriptor].is_writer) || is_writer_waiting(lockdescriptor, priority)) { //lock is currently acquired by writer process
-				make_process_wait(currpid, lockdescriptor);
+				make_process_wait(currpid, lockdescriptor, READ, priority);
 				resched();
 			}
 			else { // read lock can be acquired
@@ -78,10 +78,63 @@ int is_writer_waiting(int lockdescriptor, int priority) {
 	return shoud_wait;
 }
 
-void make_process_wait(int pid, int lockdescriptor) {
+void set_priority_inheritance(int pid) {
+	struct pentry* pptr, *wpptr;
+	struct lentry* lptr;
+	int prio,inh_prio,l_index,proc_index,curr,max_prio,l_index;
+	pptr = &proctab[pid];
+	for (l_index = 0; l_index < NLOCKS; l_index++) {
+		lptr = &locks[l_index];
+		if (lptr->proc_list[pid]) {
+			curr = lptr->lprio;
+			if (max_prio == NULL || curr > max) {
+				max_prio = curr;
+			}
+		}
+	}
+
+	if (max == NULL) {
+		pptr->pinh = 0
+	}
+	else {
+		pptr->pinh = max_prio;
+	}
+
+	if (pptr->plock != -1) {
+		lptr = &locks[pptr->plock];
+		prio = ptr->pinh != 0 ? ptr->pinh : ptr->pprio;
+		lptr->lprio = (lptr->lprio > prio) ? lptr->lprio : prio; // since process's priority is being increased, change the max priority in queue
+		for (proc_index = 0; proc_index < NPROC; proc_index++) {
+			if (lptr->proc_list[proc_index]) {
+				wpptr = &proctab[proc_index];
+				inh_prio = wpptr->pinh != 0 ? wpptr->pinh : wpptr->pprio;
+				set_priority_inheritance(proc_index);
+			}
+		}
+	}
+	return;
+}
+
+
+void make_process_wait(int pid, int lockdescriptor, int type, int priority) {
 	struct pentry* ptr;
+	struct lentry* lptr;
+	int proc_index;
 	ptr = &proctab[pid];
+	int prio = ptr->pinh != 0 ? ptr->pinh : ptr->pprio;
+	lptr = &locks[lockdescriptor];
 	ptr->pstate = PRWAIT;
 	ptr->plock = lockdescriptor;
+	insert_lq(pid, lptr->lqhead, priority, type);
+	if (prio > lptr->lprio) {
+		lptr->lprio = prio;
+	}
+
+	for (proc_index = 0; proc_index < NPROC; proc_index++) {
+		if (lptr->proc_list[proc_index]) {
+			ptr = &proctab[proc_index];
+			set_priority_inheritance(proc_index);
+		}
+	}
 	return;
 }

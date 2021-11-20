@@ -2,13 +2,14 @@
 
 #include <conf.h>
 #include <kernel.h>
+#include <lock.h>
 #include <lock_q.h>
 
 /*------------------------------------------------------------------------
  * newqueue  --  initialize a new list in the q_l structure
  *------------------------------------------------------------------------
  */
- int newqueue_l()
+int newqueue_l()
 {
 	struct	qent* hptr;
 	struct	qent* tptr;
