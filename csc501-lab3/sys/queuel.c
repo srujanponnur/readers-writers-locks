@@ -17,7 +17,7 @@ int insert_lq(int proc, int head, int key, int ltype) {
 	q[proc].qkey = key;
 	q[proc].qtype = ltype;
 	q[proc].added_at = ctr1000;
-	kprintf("The current value is: %d\n", (int)q[proc].added_at);
+	//kprintf("The current value is: %d\n", (int)q[proc].added_at);
 	q[prev].qnext = proc;
 	q[next].qprev = proc;
 	return(OK);
