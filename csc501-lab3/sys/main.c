@@ -345,11 +345,11 @@ void test7()
     kprintf("-start reader B, then sleep 1s. reader waits for the lock\n");
     resume(rd1);
     resume(rd2);
-    sleep(5);
+    //sleep(5);
     kprintf("-start writer C, writer C should acquire before reader B\n");
     resume(wr2);
 
-    sleep(20);
+    sleep(10);
     kprintf("output=%s\n", output2);
     // AACCBB
     assert(mystrncmp(output2, "AACCBB", 6) == 0, "Test 7 FAILED\n");
