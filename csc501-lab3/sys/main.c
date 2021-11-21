@@ -343,7 +343,7 @@ void test7()
    
     kprintf("-start reader B, then sleep 1s. reader waits for the lock\n");
     resume(rd1);
-    sleep(5)
+    sleep(5);
     kprintf("-start writer C, writer C should acquire before reader B\n");
     resume(wr2);
 
