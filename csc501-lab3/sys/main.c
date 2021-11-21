@@ -145,7 +145,7 @@ void test5()
     rd2 = create(reader2, 2000, 20, "reader2", 3, 'B', lck, 30);
     rd3 = create(reader2, 2000, 20, "reader2", 3, 'D', lck, 25);
     rd4 = create(reader2, 2000, 20, "reader2", 3, 'E', lck, 20);
-    rd5 = create(reader2, 2000, 20, "reader2", 3, 'E', lck, 20);
+    rd5 = create(reader2, 2000, 20, "reader2", 3, 'F', lck, 20);
     wr1 = create(writer2, 2000, 20, "writer2", 3, 'C', lck, 25);
 
     kprintf("-start reader A, then sleep 1s. lock granted to reader A\n");
