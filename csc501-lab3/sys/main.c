@@ -32,6 +32,7 @@ void reader1(char* msg, int lck)
 {
     lock(lck, READ, DEFAULT_LOCK_PRIO);
     kprintf("  %s: acquired lock, sleep 2s\n", msg);
+    kprintf("The reader count is: %d", locks[lck].reader_count);
     sleep(2);
     kprintf("  %s: to release lock\n", msg);
     releaseall(1, lck);
@@ -45,6 +46,7 @@ void test1()
 
     kprintf("\nTest 1: readers can share the rwlock\n");
     lck = lcreate();
+    kprintf("The lock descriptor is: %d", lck);
     assert(lck != SYSERR, "Test 1 failed");
 
     pid1 = create(reader1, 2000, 20, "reader a", 2, "reader a", lck);
