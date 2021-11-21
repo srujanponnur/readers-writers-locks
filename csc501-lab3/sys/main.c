@@ -209,7 +209,7 @@ void test4() {
     int     rd1, rd2;
     int     wr1,i;
     kprintf("\nTest 4: ldelete case\n");
-    for (i = 0; i < 48; i++) {
+    for (i = 0; i < 46; i++) {
         lck = lcreate();
     }
     lck = lcreate();
