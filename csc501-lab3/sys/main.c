@@ -365,17 +365,17 @@ void test8() {
     lck = lcreate();
     kprintf("The lock descriptor is: %d\n", lck);
     assert(lck != SYSERR, "Test 4 failed");
-    wr1 = create(writer7, 2000, 20, "writer7", 3, 'A', lck, 25);
-    rd1 = create(reader2, 2000, 20, "reader2", 3, 'B', lck, 20);
-    rd2 = create(reader2, 2000, 20, "reader2", 3, 'C', lck, 20);
-    wr2 = create(writer7, 2000, 20, "writer7", 3, 'D', lck, 20);
-    kprintf("-start Writer A, then sleep 5s. lock granted to writer A\n");
-    resume(wr1);
-
-    kprintf("-start reader B, then sleep 1s. reader waits for the lock\n");
+    rd1 = create(reader4, 2000, 20, "reader8", 3, 'A', lck, 25);
+    wr1 = create(reader2, 2000, 20, "writer8", 3, 'B', lck, 20);
+    //kprintf("-start Writer A, then sleep 5s. lock granted to writer A\n");
+    //kprintf("-start reader B, then sleep 1s. reader waits for the lock\n");
     resume(rd1);
-    resume(rd2);
+    resume(wr1);
     //sleep(5); //uncomment this to test change order of lock acquisition
+    ldelete(lck);
+    locks[lck].lstatus = LINIT;
+    wr1 = create(reader2, 2000, 20, "writer8", 3, 'B', lck, 20);
+    resume(wr1);
     kprintf("-start writer C, writer C should acquire before reader B\n");
     resume(wr2);
     /*rd1 = create(reader4, 2000, 25, "reader8", 2, 'A', lck, 20);
