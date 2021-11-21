@@ -345,7 +345,7 @@ void test7()
     kprintf("-start reader B, then sleep 1s. reader waits for the lock\n");
     resume(rd1);
     resume(rd2);
-    //sleep(5);
+    //sleep(5); //uncomment this to test change order of lock acquisition
     kprintf("-start writer C, writer C should acquire before reader B\n");
     resume(wr2);
 
@@ -363,13 +363,13 @@ int main()
      * The provided results do not guarantee your correctness.
      * You need to read the PA2 instruction carefully.
      */
-    //test1();
-    //test2();
-    //test3();
+    test1();
+    test2();
+    test3();
     //test4();
     //test5();
     //test6();
-    test7();
+    //test7();
 
     /* The hook to shutdown QEMU for process-like execution of XINU.
      * This API call exists the QEMU process.
