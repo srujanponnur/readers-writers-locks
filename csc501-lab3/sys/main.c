@@ -133,7 +133,7 @@ void test5()
 {
     count2 = 0;
     int     lck;
-    int     rd1, rd2, rd3, rd4, rd5;
+    int     rd1, rd2, rd3, rd4,rd5;
     int     wr1;
 
     kprintf("\nTest 2: wait on locks with priority. Expected order of"
@@ -145,46 +145,7 @@ void test5()
     rd2 = create(reader2, 2000, 20, "reader2", 3, 'B', lck, 30);
     rd3 = create(reader2, 2000, 20, "reader2", 3, 'D', lck, 25);
     rd4 = create(reader2, 2000, 20, "reader2", 3, 'E', lck, 20);
-    void test2()
-{
-    count2 = 0;
-    int     lck;
-    int     rd1, rd2, rd3, rd4;
-    int     wr1;
-
-    kprintf("\nTest 2: wait on locks with priority. Expected order of"
-        " lock acquisition is: reader A, reader B, reader D, writer C & reader E\n");
-    lck = lcreate();
-    assert(lck != SYSERR, "Test 2 failed");
-
-    rd1 = create(reader2, 2000, 20, "reader2", 3, 'A', lck, 20);
-    rd2 = create(reader2, 2000, 20, "reader2", 3, 'B', lck, 30);
-    rd3 = create(reader2, 2000, 20, "reader2", 3, 'D', lck, 25);
-    rd4 = create(reader2, 2000, 20, "reader2", 3, 'E', lck, 20);
-    rd5 = create(reader2, 2000, 20, "reader2", 3, 'F', lck, 20);
-    wr1 = create(writer2, 2000, 20, "writer2", 3, 'C', lck, 25);
-
-    kprintf("-start reader A, then sleep 1s. lock granted to reader A\n");
-    resume(rd1);
-    sleep(1);
-
-    kprintf("-start writer C, then sleep 1s. writer waits for the lock\n");
-    resume(wr1);
-    sleep(1);
-
-
-    kprintf("-start reader B, D, E. reader B is granted lock.\n");
-    resume(rd2);
-    resume(rd3);
-    resume(rd4);
-
-
-    sleep(15);
-    kprintf("output=%s\n", output2);
-    // ABD(ABD in arbitrary orders)CCEE
-    assert(mystrncmp(output2, "ABABDDCCEE", 10) == 0, "Test 2 FAILED\n");
-    kprintf("Test 2 OK\n");
-}
+    rd5 = create(reader2, 2000, 20, "reader2", 3, 'E', lck, 20);
     wr1 = create(writer2, 2000, 20, "writer2", 3, 'C', lck, 25);
 
     kprintf("-start reader A, then sleep 1s. lock granted to reader A\n");
@@ -201,7 +162,6 @@ void test5()
     resume(rd3);
     resume(rd4);
     resume(rd5);
-
 
     sleep(15);
     kprintf("output=%s\n", output2);
@@ -331,8 +291,7 @@ int main()
     //test1();
     //test2();
     //test3();
-    //test4();
-    test5();
+    test4();
 
     /* The hook to shutdown QEMU for process-like execution of XINU.
      * This API call exists the QEMU process.
