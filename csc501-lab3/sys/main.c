@@ -397,7 +397,8 @@ void test8() {
     wr1 = create(writer2, 2000, 20, "writer2", 3, 'C', lck, 25);
     resume(rd1);
     resume(wr1);
-    sleep(10);
+    kprintf("TEST 8 OK");
+    sleep(20);
     return;
 }
 
