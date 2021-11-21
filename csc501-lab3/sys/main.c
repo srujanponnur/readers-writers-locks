@@ -365,14 +365,14 @@ void test8() {
     lck = lcreate();
     kprintf("The lock descriptor is: %d\n", lck);
     assert(lck != SYSERR, "Test 4 failed");
-    rd1 = create(reader4, 2000, 25, "reader4", 2, 'A', lck);
-    wr1 = create(writer2, 2000, 25, "reader4", 2, 'B', lck);
+    rd1 = create(reader4, 2000, 25, "reader8", 2, 'A', lck, 20);
+    wr1 = create(writer2, 2000, 25, "writer8", 2, 'B', lck, 25);
     resume(rd1);
     resume(rd2);
     ldelete(lck);
     kill(wr1);
     locks[lck].lstatus = LINIT;
-    rd2 = create(writer2, 2000, 25, "reader4", 2, 'C', lck);
+    rd2 = create(writer2, 2000, 25, "reader8", 2, 'C', lck, 25);
     resume(rd2);
     sleep(10);
     return;
