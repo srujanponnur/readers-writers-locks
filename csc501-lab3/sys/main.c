@@ -365,8 +365,8 @@ void test8() {
     lck = lcreate();
     kprintf("The lock descriptor is: %d\n", lck);
     assert(lck != SYSERR, "Test 4 failed");
-    rd1 = create(reader5, 2000, 20, "reader8", 3, 'A', lck, 25);
-    wr1 = create(reader2, 2000, 20, "writer8", 3, 'B', lck, 20);
+    rd1 = create(reader2, 2000, 20, "reader8", 3, 'A', lck, 25);
+    wr1 = create(writer2, 2000, 20, "writer8", 3, 'B', lck, 20);
     //kprintf("-start Writer A, then sleep 5s. lock granted to writer A\n");
     //kprintf("-start reader B, then sleep 1s. reader waits for the lock\n");
     resume(rd1);
