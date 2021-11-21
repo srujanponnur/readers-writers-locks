@@ -6,12 +6,12 @@
 #define WRITE -4
 
 #define NLOCKS 50 //number of locks
-#define LINIT '\01'
-#define	LFREE '\02'
-#define LUSED '\03'
+#define LINIT 0
+#define	LFREE -1
+#define LUSED 1
 
 struct lentry {
-	char lstatus;
+	int lstatus;
 	int ltype;
 	int lprio;
 	int lqhead;

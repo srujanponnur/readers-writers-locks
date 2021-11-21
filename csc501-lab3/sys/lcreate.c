@@ -22,7 +22,7 @@ int lcreate() {
 	}
 	locks[free_lock].is_writer = 0;
 	locks[free_lock].reader_count = 0;
-	kprintf("The free lock found is: %d, status is: %c\n", free_lock, locks[free_lock].lstatus);
+	kprintf("The free lock found is: %d, status is: %d\n", free_lock, locks[free_lock].lstatus);
 	restore(ps);
 	return free_lock;
 }
