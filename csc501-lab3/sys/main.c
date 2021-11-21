@@ -207,8 +207,11 @@ void reader4(char* msg, int lck)
 void test4() {
     int     lck;
     int     rd1, rd2;
-    int     wr1;
+    int     wr1,i;
     kprintf("\nTest 4: ldelete case\n");
+    for (i = 0; i < 48; i++) {
+        lck = lcreate();
+    }
     lck = lcreate();
     kprintf("The lock descriptor is: %d\n", lck);
     assert(lck != SYSERR, "Test 4 failed");
@@ -230,7 +233,7 @@ int main()
     //test1();
     //test2();
     //test3();
-    //test4();
+    test4();
 
     /* The hook to shutdown QEMU for process-like execution of XINU.
      * This API call exists the QEMU process.
