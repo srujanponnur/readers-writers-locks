@@ -85,7 +85,7 @@ int releaseall(int numlocks, int ldesc1) { // variable argument validation with 
 					}
 					else { /* no writers in queue, all readers in queue can acquire the lock*/
 						//kprintf("No writer in queue, just acquiring this\n");
-						print_queue(*lock);
+						//print_queue(*lock);
 						entry_count = get_queue_count(*lock);
 						for (q_index = 0; q_index < entry_count; q_index++) {
 							get_last_in_queue(*lock,&temp);

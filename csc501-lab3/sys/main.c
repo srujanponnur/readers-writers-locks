@@ -32,7 +32,6 @@ void reader1(char* msg, int lck)
 {
     lock(lck, READ, DEFAULT_LOCK_PRIO);
     kprintf("  %s: acquired lock, sleep 2s\n", msg);
-    kprintf("The reader count is: %d", locks[lck].reader_count);
     sleep(2);
     kprintf("  %s: to release lock\n", msg);
     releaseall(1, lck);
