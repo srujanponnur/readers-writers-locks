@@ -409,13 +409,13 @@ int main()
      * The provided results do not guarantee your correctness.
      * You need to read the PA2 instruction carefully.
      */
-    //test1();
-    //test2();
-    //test3();
-    //test4();
-    //test5();
-    //test6();
-    //test7();
+    test1();
+    test2();
+    test3();
+    test4();
+    test5();
+    test6();
+    test7();
     test8();
 
     /* The hook to shutdown QEMU for process-like execution of XINU.
