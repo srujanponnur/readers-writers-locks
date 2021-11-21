@@ -198,7 +198,6 @@ void reader4(char* msg, int lck)
     kprintf("  %s: to acquire lock\n", msg);
     lock(lck, READ, DEFAULT_LOCK_PRIO);
     kprintf("  %s: acquired lock\n", msg);
-    sleep(2);
     kprintf("  %s: to release lock\n", msg);
     releaseall(1, lck);
 }
@@ -209,7 +208,6 @@ void reader5(char* msg, int lck)
     kprintf("  %s: to acquire lock\n", msg);
     lock(lck, READ, DEFAULT_LOCK_PRIO);
     kprintf("  %s: acquired lock\n", msg);
-    sleep(2);
     kprintf("  %s: to release lock\n", msg);
     releaseall(1, lck);
     sleep(5);
@@ -231,6 +229,7 @@ void test4() {
     resume(rd1);
     resume(rd2);
     ldelete(lck);
+    sleep(4);
     locks[lck].lstatus = LINIT;
     rd1 = create(reader4, 2000, 25, "reader4", 2, "reader C", lck);
     resume(rd1);
