@@ -89,7 +89,7 @@ void set_priority_inheritance(int pid) {
 	for (l_index = 0; l_index < NLOCKS; l_index++) {
 		lptr = &locks[l_index];
 		if (lptr->proc_list[pid]) {
-			kprintf("Process: %d has lock: %d\n", pid, l_index);
+			kprintf("Process: %d has lock: %d with lprio: %d\n", pid, l_index, lptr->lprio);
 			curr = lptr->lprio;
 			if (max_prio == NULL || curr > max_prio) {
 				max_prio = curr;
