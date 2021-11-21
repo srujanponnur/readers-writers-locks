@@ -199,8 +199,8 @@ int main()
      * You need to read the PA2 instruction carefully.
      */
     //test1();
-    test2();
-    //test3();
+    //test2();
+    test3();
 
     /* The hook to shutdown QEMU for process-like execution of XINU.
      * This API call exists the QEMU process.
