@@ -84,14 +84,14 @@ void set_priority_inheritance(int pid) {
 	struct pentry* pptr, *wpptr;
 	struct lentry* lptr;
 	kprintf("Coming to set_inh func: %d\n", pid);
-	int prio,l_index,proc_index,curr,max_prio;
+	int prio,l_index,proc_index,curr,max_prio = -1000;
 	pptr = &proctab[pid];
 	for (l_index = 0; l_index < NLOCKS; l_index++) {
 		lptr = &locks[l_index];
 		if (lptr->proc_list[pid]) {
 			kprintf("Process: %d has lock: %d with lprio: %d\n", pid, l_index, lptr->lprio);
 			curr = lptr->lprio;
-			if (max_prio == NULL || curr > max_prio) {
+			if (curr > max_prio) {
 				max_prio = curr;
 				kprintf("Reaching here with maxprio: %d\n", max_prio);
 			}
