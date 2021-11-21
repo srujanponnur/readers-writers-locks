@@ -292,18 +292,6 @@ void writer6(char msg, int lck, int lprio)
     releaseall(1, lck);
 }
 
-void writer6(char msg, int lck, int lprio)
-{
-    kprintf("  %c: to acquire lock\n", msg);
-    lock(lck, WRITE, lprio);
-    output2[count2++] = msg;
-    kprintf("  %c: acquired lock, sleep 3s\n", msg);
-    sleep(1);
-    output2[count2++] = msg;
-    kprintf("  %c: to release lock\n", msg);
-    releaseall(1, lck);
-}
-
 void test6() {
     int	lck;
     int	wr1, wr2;
@@ -369,7 +357,7 @@ void test7()
 }
 
 
-void main()
+int main()
 {
     /* These test cases are only used for test purpose.
      * The provided results do not guarantee your correctness.
