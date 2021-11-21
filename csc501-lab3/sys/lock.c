@@ -83,17 +83,21 @@ int is_writer_waiting(int lockdescriptor, int priority) {
 void set_priority_inheritance(int pid) {
 	struct pentry* pptr, *wpptr;
 	struct lentry* lptr;
+	kprintf("Coming to set_inh func: %d\n", pid);
 	int prio,l_index,proc_index,curr,max_prio;
 	pptr = &proctab[pid];
 	for (l_index = 0; l_index < NLOCKS; l_index++) {
 		lptr = &locks[l_index];
 		if (lptr->proc_list[pid]) {
+			kprintf("Process: %d has lock: %d\n", pid, l_index);
 			curr = lptr->lprio;
 			if (max_prio == NULL || curr > max_prio) {
 				max_prio = curr;
 			}
 		}
 	}
+
+	kprintf("The maximum priority is: %d", max_prio);
 
 	if (max_prio == NULL) {
 		pptr->pinh = 0;
@@ -132,6 +136,7 @@ void make_process_wait(int pid, int lockdescriptor, int type, int priority) {
 
 	for (proc_index = 0; proc_index < NPROC; proc_index++) {
 		if (lptr->proc_list[proc_index]) {
+			kprintf("Calling set_inh func for process: %d\n", proc_index);
 			ptr = &proctab[proc_index];
 			set_priority_inheritance(proc_index);
 		}
