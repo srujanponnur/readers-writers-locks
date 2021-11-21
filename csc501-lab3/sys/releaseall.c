@@ -206,7 +206,7 @@ void get_type(int lockdescriptor, int *result, int type) {
 	struct lentry* lptr;
 	int last, head;
 	*result = -1;
-	if (type != READ || type != WRITE)  {
+	if (type != READ && type != WRITE)  {
 		restore(ps);
 		return;
 	}
