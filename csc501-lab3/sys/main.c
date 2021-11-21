@@ -326,7 +326,7 @@ void test7()
 {
     count2 = 0;
     int     lck;
-    int     rd1;
+    int     rd1, rd2;
     int     wr1, wr2;
 
     kprintf("\nTest 7: write before read if, equal priorities");
@@ -336,13 +336,15 @@ void test7()
 
     wr1 = create(writer7, 2000, 20, "writer7", 3, 'A', lck, 25);
     rd1 = create(reader2, 2000, 20, "reader2", 3, 'B', lck, 20);
-    wr2 = create(writer7, 2000, 20, "writer7", 3, 'C', lck, 20);
+    rd2 = create(reader2, 2000, 20, "reader2", 3, 'C', lck, 20);
+    wr2 = create(writer7, 2000, 20, "writer7", 3, 'D', lck, 20);
 
     kprintf("-start Writer A, then sleep 5s. lock granted to writer A\n");
     resume(wr1);
    
     kprintf("-start reader B, then sleep 1s. reader waits for the lock\n");
     resume(rd1);
+    resume(rd2);
     sleep(5);
     kprintf("-start writer C, writer C should acquire before reader B\n");
     resume(wr2);
