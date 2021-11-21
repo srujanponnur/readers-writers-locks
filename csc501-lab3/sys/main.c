@@ -240,6 +240,7 @@ void test4() {
     //lck = lcreate();
     kprintf("The new lock descriptor is: %d\n", lck);
     resume(rd1);
+    sleep(5);
 }
 
 
