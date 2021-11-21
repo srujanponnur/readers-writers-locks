@@ -17,6 +17,7 @@ int insert_lq(int proc, int head, int key, int ltype) {
 	q[proc].qkey = key;
 	q[proc].qtype = ltype;
 	q[proc].added_at = ctr1000;
+	kprintf("The current value is: %d\n", (int)q[proc].added_at);
 	q[prev].qnext = proc;
 	q[next].qprev = proc;
 	return(OK);
@@ -29,7 +30,7 @@ void print_queue(int lockdescriptor) {
 	head = lptr->lqhead;
 	tail = lptr->lqtail;
 	last = q[tail].qprev;
-	kprintf("The queue entries in lock: %d are\n", lockdescriptor);
+	//kprintf("The queue entries in lock: %d are\n", lockdescriptor);
 	while (last != head) {
 		kprintf("%d ", last);
 		last = q[last].qprev;
@@ -49,7 +50,7 @@ int get_queue_count(int lockdescriptor) {
 		count++;
 		last = q[last].qprev;
 	}
-	kprintf("\nThe count in the lock queue: %d\n", count);
+	//kprintf("\nThe count in the lock queue: %d\n", count);
 	return count;
 }
 
