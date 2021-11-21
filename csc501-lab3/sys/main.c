@@ -360,7 +360,7 @@ void test7()
 void test8() {
     int     lck;
     int     rd1, rd2;
-    int     wr1, i;
+    int     wr1, wr2,i;
     kprintf("\nTest 8: ldelete case after process kill\n");
     lck = lcreate();
     kprintf("The lock descriptor is: %d\n", lck);
