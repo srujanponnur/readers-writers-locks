@@ -356,6 +356,31 @@ void test7()
     kprintf("Test 7 OK\n");
 }
 
+void reader8(char msg, int lck, int lprio)
+{
+    int     ret;
+
+    kprintf("  %c: to acquire lock\n", msg);
+    lock(lck, READ, lprio);
+    output2[count2++] = msg;
+    kprintf("  %c: acquired lock, sleep 3s\n", msg);
+    sleep(3);
+    output2[count2++] = msg;
+    kprintf("  %c: to release lock\n", msg);
+    releaseall(1, lck);
+}
+
+void writer8(char msg, int lck, int lprio)
+{
+    kprintf("  %c: to acquire lock\n", msg);
+    lock(lck, WRITE, lprio);
+    output2[count2++] = msg;
+    kprintf("  %c: acquired lock, sleep 3s\n", msg);
+    sleep(5);
+    output2[count2++] = msg;
+    kprintf("  %c: to release lock\n", msg);
+    releaseall(1, lck);
+}
 
 void test8() {
     int     lck;
@@ -364,8 +389,8 @@ void test8() {
     kprintf("\nTest 8: ldelete case after process kill\n");
     lck = lcreate();
     assert(lck != SYSERR, "Test 4 failed");
-    rd1 = create(reader1, 2000, 20, "reader8", 3, 'A', lck, 25);
-    wr1 = create(writer2, 2000, 20, "writer8", 3, 'B', lck, 20);
+    rd1 = create(reader2, 2000, 20, "reader2", 3, 'A', lck, 20);
+    wr1 = create(writer2, 2000, 20, "writer2", 3, 'C', lck, 25);
     resume(rd1);
     resume(wr1);
     sleep(10);
