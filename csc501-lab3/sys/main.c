@@ -46,7 +46,6 @@ void test1()
 
     kprintf("\nTest 1: readers can share the rwlock\n");
     lck = lcreate();
-    kprintf("The lock descriptor is: %d", lck);
     assert(lck != SYSERR, "Test 1 failed");
 
     pid1 = create(reader1, 2000, 20, "reader a", 2, "reader a", lck);
@@ -200,7 +199,7 @@ int main()
      * You need to read the PA2 instruction carefully.
      */
     test1();
-    //test2();
+    test2();
     //test3();
 
     /* The hook to shutdown QEMU for process-like execution of XINU.
