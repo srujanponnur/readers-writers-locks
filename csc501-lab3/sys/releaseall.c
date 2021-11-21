@@ -55,7 +55,7 @@ int releaseall(int numlocks, int ldesc1) { // variable argument validation with 
 						if (q[result].qkey == q[writer].qkey) { /* writer and reader has same priority*/
 							r_waittime = (int)(ctr1000 - q[result].added_at);
 							w_waittime = (int)(ctr1000 - q[writer].added_at);
-							kprintf("The difference is: %d\n", (w_waittime - r_waittime));
+							kprintf("The difference is: %d\n", (r_waittime - w_waittime));
 							if ((w_waittime - r_waittime) < 1000) {
 								// a writer has arrived within a second, writer acquring lock
 								acquire_lock(writer, *lock, WRITE);
