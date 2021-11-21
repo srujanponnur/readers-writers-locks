@@ -315,7 +315,7 @@ void writer7(char msg, int lck, int lprio)
     lock(lck, WRITE, lprio);
     output2[count2++] = msg;
     kprintf("  %c: acquired lock, sleep 3s\n", msg);
-    sleep(5);
+    sleep(7);
     output2[count2++] = msg;
     kprintf("  %c: to release lock\n", msg);
     releaseall(1, lck);
@@ -340,14 +340,14 @@ void test7()
 
     kprintf("-start Writer A, then sleep 5s. lock granted to writer A\n");
     resume(wr1);
-
+   
     kprintf("-start reader B, then sleep 1s. reader waits for the lock\n");
     resume(rd1);
-
+    sleep(5)
     kprintf("-start writer C, writer C should acquire before reader B\n");
     resume(wr2);
 
-    sleep(15);
+    sleep(20);
     kprintf("output=%s\n", output2);
     // AACCBB
     assert(mystrncmp(output2, "AACCBB", 6) == 0, "Test 7 FAILED\n");
