@@ -22,6 +22,7 @@ int lock(int lockdescriptor, int type, int priority) {
 	int is_deleted = locks[lockdescriptor].is_deleted;
 	
 	if((ptr->plused[lockdescriptor] == PLUSED || ptr->plused[lockdescriptor] == PLDEL) && is_deleted)  { // this lock was recreated but old lock was used by this process
+		kprintf("Reaching the syncronous delete case\n");
 		restore(ps);
 		return SYSERR;
 	} 

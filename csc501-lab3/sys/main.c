@@ -192,6 +192,35 @@ void test3()
     kprintf("Test 3 OK\n");
 }
 
+void reader4(char* msg, int lck)
+{
+    int     ret;
+    kprintf("  %s: to acquire lock\n", msg);
+    lock(lck, READ, DEFAULT_LOCK_PRIO);
+    kprintf("  %s: acquired lock\n", msg);
+    sleep(2);
+    kprintf("  %s: to release lock\n", msg);
+    releaseall(1, lck);
+}
+
+
+void test4() {
+    int     lck;
+    int     rd1, rd2;
+    int     wr1;
+    kprintf("\nTest 4: ldelete case\n");
+    lck = lcreate();
+    kprintf("The lock descriptor is: %d\n", lck);
+    assert(lck != SYSERR, "Test 4 failed");
+    rd1 = create(reader4, 2000, 25, "reader4", 2, "reader A", lck);
+    rd2 = create(reader4, 2000, 25, "reader4", 2, "reader B", lck);
+    ldelete(lck);
+    lck = lcreate();
+    kprintf("The new lock descriptor is: %d\n", lck);
+    rd1 = create(reader4, 2000, 25, "reader4", 2, "reader A", lck);
+}
+
+
 int main()
 {
     /* These test cases are only used for test purpose.
@@ -200,7 +229,8 @@ int main()
      */
     //test1();
     //test2();
-    test3();
+    //test3();
+    //test4();
 
     /* The hook to shutdown QEMU for process-like execution of XINU.
      * This API call exists the QEMU process.

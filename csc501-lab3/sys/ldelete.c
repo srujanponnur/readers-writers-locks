@@ -21,11 +21,12 @@ int ldelete(int lockdescriptor) {
 	lock_ptr->lstatus = LFREE;
 	lock_ptr->is_deleted = 1; 
 	
-
 	for (proc_index = 0; proc_index < NPROC; proc_index++) { // clearing the processes 
+		pptr = &proctab[proc_index];
 		if (lock_ptr->proc_list[proc_index]) {
 			lock_ptr->proc_list[proc_index] = 0;
-			pptr = &proctab[proc_index];
+		}
+		if (pptr->plused[lockdescriptor] == PLUSED) {
 			pptr->plused[lockdescriptor] = PLDEL; /* the lock being used got deleted */
 		}
 	}
