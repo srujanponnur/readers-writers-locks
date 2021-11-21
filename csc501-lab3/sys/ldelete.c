@@ -20,7 +20,9 @@ int ldelete(int lockdescriptor) {
 
 	lock_ptr->lstatus = LFREE;
 	lock_ptr->is_deleted = 1; 
-	
+	lock_ptr->is_writer = 0;
+	lock_ptr->reader_count = 0;
+
 	for (proc_index = 0; proc_index < NPROC; proc_index++) { // clearing the processes 
 		pptr = &proctab[proc_index];
 		if (lock_ptr->proc_list[proc_index]) {

@@ -201,11 +201,6 @@ void reader4(char* msg, int lck)
     sleep(2);
     kprintf("  %s: to release lock\n", msg);
     releaseall(1, lck);
-    ldelete(lck);
-    locks[lck].lstatus = LINIT;
-    kprintf("Calling this again to trigger ldelete case");
-    lock(lck, READ, DEFAULT_LOCK_PRIO);
-    return;
 }
 
 void reader5(char* msg, int lck)
@@ -217,6 +212,9 @@ void reader5(char* msg, int lck)
     sleep(2);
     kprintf("  %s: to release lock\n", msg);
     releaseall(1, lck);
+    sleep(5);
+    kprintf("Calling this again to trigger ldelete case\n");
+    lock(lck, READ, DEFAULT_LOCK_PRIO);
 }
 
 
@@ -232,15 +230,15 @@ void test4() {
     kprintf("The lock descriptor is: %d\n", lck);
     assert(lck != SYSERR, "Test 4 failed");
     rd1 = create(reader4, 2000, 25, "reader4", 2, "reader A", lck);
-    /*rd2 = create(reader5, 2000, 25, "reader4", 2, "reader B", lck);
+    rd2 = create(reader5, 2000, 25, "reader4", 2, "reader B", lck);
     resume(rd1);
     resume(rd2);
-    ldelete(lck);*/
-    
-    //lck = lcreate();
-    kprintf("The new lock descriptor is: %d\n", lck);
+    ldelete(lck);
+    locks[lck].lstatus = LINIT;
+    rd1 = create(reader4, 2000, 25, "reader4", 2, "reader A", lck);
     resume(rd1);
-    sleep(5);
+    sleep(10);
+    return;
 }
 
 
