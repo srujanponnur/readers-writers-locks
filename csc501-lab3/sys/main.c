@@ -171,7 +171,7 @@ void test3()
     kprintf("-start reader A, then sleep 1s. reader A(prio 25) blocked on the lock\n");
     resume(rd1);
     sleep(1);
-    assert(getprio(wr1) == 25, "Test 3 failed");
+    assert(getprio(wr1) == 25, "Test 3 failed here1");
 
     kprintf("-start reader B, then sleep 1s. reader B(prio 30) blocked on the lock\n");
     resume(rd2);
@@ -198,9 +198,9 @@ int main()
      * The provided results do not guarantee your correctness.
      * You need to read the PA2 instruction carefully.
      */
-    //test1();
-    //test2();
-    test3();
+    test1();
+    test2();
+    //test3();
 
     /* The hook to shutdown QEMU for process-like execution of XINU.
      * This API call exists the QEMU process.

@@ -173,7 +173,7 @@ int get_max_in_queue(int lock) {
 	last = q[tail].qprev;
 	while (last != head) {
 		pptr = &proctab[last];
-		curr = pptr->pinh != 0 ? pptr->pinh : pptr->pprio;;
+		curr = pptr->pinh != 0 ? pptr->pinh : pptr->pprio;
 		if (max == NULL || curr > max) {
 			max = curr;
 		}

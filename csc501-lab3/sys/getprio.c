@@ -13,12 +13,13 @@ SYSCALL getprio(int pid)
 {
 	STATWORD ps;    
 	struct	pentry	*pptr;
-
+	int prio;
 	disable(ps);
 	if (isbadpid(pid) || (pptr = &proctab[pid])->pstate == PRFREE) {
 		restore(ps);
 		return(SYSERR);
 	}
 	restore(ps);
-	return(pptr->pprio);
+	prio = pptr->pinh != 0 ? pptr->pinh : pptr->pprio;
+	return(prio);
 }

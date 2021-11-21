@@ -12,12 +12,13 @@
 int ready(int pid, int resch)
 {
 	register struct	pentry	*pptr;
-
+	int prio;
 	if (isbadpid(pid))
 		return(SYSERR);
 	pptr = &proctab[pid];
 	pptr->pstate = PRREADY;
-	insert(pid,rdyhead,pptr->pprio);
+	prio = pptr->pinh != 0 ? pptr->pinh : pptr->pprio;
+	insert(pid,rdyhead,prio);
 	if (resch)
 		resched();
 	return(OK);
