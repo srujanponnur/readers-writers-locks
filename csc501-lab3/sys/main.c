@@ -305,7 +305,7 @@ void test6() {
     resume(wr1);
     resume(wr2);
 
-    sleep(5);
+    sleep(11);
     kprintf('\n Test 6 OK');
 }
 
