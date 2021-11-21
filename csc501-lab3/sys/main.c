@@ -364,7 +364,6 @@ void reader8(char msg, int lck, int lprio)
     lock(lck, READ, lprio);
     output2[count2++] = msg;
     kprintf("  %c: acquired lock, sleep 3s\n", msg);
-    sleep(5);
     output2[count2++] = msg;
     kprintf("  %c: to release lock\n", msg);
     releaseall(1, lck);
