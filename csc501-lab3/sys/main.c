@@ -59,8 +59,39 @@ void test1()
     kprintf("Test 1 ok\n");
 }
 
+void writer6(char msg, int lck, int lprio)
+{
+    kprintf("  %c: to acquire lock\n", msg);
+    lock(lck, WRITE, lprio);
+    output2[count2++] = msg;
+    kprintf("  %c: acquired lock, sleep 3s\n", msg);
+    sleep(1);
+    output2[count2++] = msg;
+    kprintf("  %c: to release lock\n", msg);
+    releaseall(1, lck);
+}
+
+void test6() {
+    int	lck;
+    int	wr1, wr2;
+
+    kprintf("\nTest 1: Writer's can't share the rwlock\n");
+    lck = lcreate();
+    assert(lck != SYSERR, "Test 6 failed");
+    wr1 = create(writer6, 2000, 20, "writer6", 3, 'A', lck, 25);
+    wr2 = create(writer6, 2000, 20, "writer6", 3, 'B', lck, 25);
+
+    resume(wr1);
+    resume(wr2);
+
+    sleep(5);
+    kprintf('\n Test 6 OK');
+}
+
+
+
 /*----------------------------------Test 2---------------------------*/
-char output2[12];
+char output2[13];
 int count2;
 void reader2(char msg, int lck, int lprio)
 {
@@ -129,6 +160,53 @@ void test2()
 }
 
 
+void writer7(char msg, int lck, int lprio)
+{
+    kprintf("  %c: to acquire lock\n", msg);
+    lock(lck, WRITE, lprio);
+    output2[count2++] = msg;
+    kprintf("  %c: acquired lock, sleep 3s\n", msg);
+    sleep(1);
+    output2[count2++] = msg;
+    kprintf("  %c: to release lock\n", msg);
+    releaseall(1, lck);
+}
+
+
+void test7()
+{
+    count2 = 0;
+    int     lck;
+    int     rd1;
+    int     wr1,wr2;
+
+    kprintf("\nTest 7: write before read if, equal priorities");
+    lck = lcreate();
+    assert(lck != SYSERR, "Test 2 failed");
+
+   
+    wr1 = create(writer7, 2000, 20, "writer7", 3, 'A', lck, 25);
+    rd1 = create(reader2, 2000, 20, "reader2", 3, 'B', lck, 20);
+    wr2 = create(writer7, 2000, 20, "writer7", 3, 'C', lck, 20);
+
+    kprintf("-start Writer A, then sleep 5s. lock granted to writer A\n");
+    resume(wr1);
+    sleep(1);
+
+    kprintf("-start reader B, then sleep 1s. reader waits for the lock\n");
+    resume(rd1);
+    sleep(1);
+
+    kprintf("-start writer C, writer C should acquire before reader B\n");
+    resume(wr2);
+   
+    sleep(12);
+    kprintf("output=%s\n", output2);
+    // AACCBB
+    assert(mystrncmp(output2, "AACCBB", 6) == 0, "Test 7 FAILED\n");
+    kprintf("Test 7 OK\n");
+}
+
 void test5()
 {
     count2 = 0;
@@ -166,7 +244,7 @@ void test5()
     sleep(15);
     kprintf("output=%s\n", output2);
     // ABD(ABD in arbitrary orders)CCEE
-    assert(mystrncmp(output2, "ABABDDCCEE", 10) == 0, "Test 2 FAILED\n");
+    assert(mystrncmp(output2, "ABABDDCCEFFE", 12) == 0, "Test 5 FAILED\n");
     kprintf("Test 2 OK\n");
 }
 
@@ -292,7 +370,9 @@ int main()
     //test2();
     //test3();
     //test4();
-    test5();
+    //test5();
+    test6();
+    //test7();
 
     /* The hook to shutdown QEMU for process-like execution of XINU.
      * This API call exists the QEMU process.
