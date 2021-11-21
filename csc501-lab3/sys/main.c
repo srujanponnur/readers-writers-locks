@@ -59,36 +59,6 @@ void test1()
     kprintf("Test 1 ok\n");
 }
 
-void writer6(char msg, int lck, int lprio)
-{
-    kprintf("  %c: to acquire lock\n", msg);
-    lock(lck, WRITE, lprio);
-    output2[count2++] = msg;
-    kprintf("  %c: acquired lock, sleep 3s\n", msg);
-    sleep(1);
-    output2[count2++] = msg;
-    kprintf("  %c: to release lock\n", msg);
-    releaseall(1, lck);
-}
-
-void test6() {
-    int	lck;
-    int	wr1, wr2;
-
-    kprintf("\nTest 1: Writer's can't share the rwlock\n");
-    lck = lcreate();
-    assert(lck != SYSERR, "Test 6 failed");
-    wr1 = create(writer6, 2000, 20, "writer6", 3, 'A', lck, 25);
-    wr2 = create(writer6, 2000, 20, "writer6", 3, 'B', lck, 25);
-
-    resume(wr1);
-    resume(wr2);
-
-    sleep(5);
-    kprintf('\n Test 6 OK');
-}
-
-
 
 /*----------------------------------Test 2---------------------------*/
 char output2[13];
@@ -160,94 +130,6 @@ void test2()
 }
 
 
-void writer7(char msg, int lck, int lprio)
-{
-    kprintf("  %c: to acquire lock\n", msg);
-    lock(lck, WRITE, lprio);
-    output2[count2++] = msg;
-    kprintf("  %c: acquired lock, sleep 3s\n", msg);
-    sleep(1);
-    output2[count2++] = msg;
-    kprintf("  %c: to release lock\n", msg);
-    releaseall(1, lck);
-}
-
-
-void test7()
-{
-    count2 = 0;
-    int     lck;
-    int     rd1;
-    int     wr1,wr2;
-
-    kprintf("\nTest 7: write before read if, equal priorities");
-    lck = lcreate();
-    assert(lck != SYSERR, "Test 2 failed");
-
-   
-    wr1 = create(writer7, 2000, 20, "writer7", 3, 'A', lck, 25);
-    rd1 = create(reader2, 2000, 20, "reader2", 3, 'B', lck, 20);
-    wr2 = create(writer7, 2000, 20, "writer7", 3, 'C', lck, 20);
-
-    kprintf("-start Writer A, then sleep 5s. lock granted to writer A\n");
-    resume(wr1);
-    sleep(1);
-
-    kprintf("-start reader B, then sleep 1s. reader waits for the lock\n");
-    resume(rd1);
-    sleep(1);
-
-    kprintf("-start writer C, writer C should acquire before reader B\n");
-    resume(wr2);
-   
-    sleep(12);
-    kprintf("output=%s\n", output2);
-    // AACCBB
-    assert(mystrncmp(output2, "AACCBB", 6) == 0, "Test 7 FAILED\n");
-    kprintf("Test 7 OK\n");
-}
-
-void test5()
-{
-    count2 = 0;
-    int     lck;
-    int     rd1, rd2, rd3, rd4,rd5;
-    int     wr1;
-
-    kprintf("\nTest 2: wait on locks with priority. Expected order of"
-        " lock acquisition is: reader A, reader B, reader D, writer C & reader E\n");
-    lck = lcreate();
-    assert(lck != SYSERR, "Test 2 failed");
-
-    rd1 = create(reader2, 2000, 20, "reader2", 3, 'A', lck, 20);
-    rd2 = create(reader2, 2000, 20, "reader2", 3, 'B', lck, 30);
-    rd3 = create(reader2, 2000, 20, "reader2", 3, 'D', lck, 25);
-    rd4 = create(reader2, 2000, 20, "reader2", 3, 'E', lck, 20);
-    rd5 = create(reader2, 2000, 20, "reader2", 3, 'F', lck, 20);
-    wr1 = create(writer2, 2000, 20, "writer2", 3, 'C', lck, 25);
-
-    kprintf("-start reader A, then sleep 1s. lock granted to reader A\n");
-    resume(rd1);
-    sleep(1);
-
-    kprintf("-start writer C, then sleep 1s. writer waits for the lock\n");
-    resume(wr1);
-    sleep(1);
-
-
-    kprintf("-start reader B, D, E. reader B is granted lock.\n");
-    resume(rd2);
-    resume(rd3);
-    resume(rd4);
-    resume(rd5);
-
-    sleep(15);
-    kprintf("output=%s\n", output2);
-    // ABD(ABD in arbitrary orders)CCEE
-    assert(mystrncmp(output2, "ABABDDCCEFFE", 12) == 0, "Test 5 FAILED\n");
-    kprintf("Test 2 OK\n");
-}
-
 /*----------------------------------Test 3---------------------------*/
 void reader3(char* msg, int lck)
 {
@@ -312,7 +194,46 @@ void test3()
     kprintf("Test 3 OK\n");
 }
 
+void test5()
+{
+    count2 = 0;
+    int     lck;
+    int     rd1, rd2, rd3, rd4, rd5;
+    int     wr1;
 
+    kprintf("\nTest 2: wait on locks with priority. Expected order of"
+        " lock acquisition is: reader A, reader B, reader D, writer C & reader E\n");
+    lck = lcreate();
+    assert(lck != SYSERR, "Test 2 failed");
+
+    rd1 = create(reader2, 2000, 20, "reader2", 3, 'A', lck, 20);
+    rd2 = create(reader2, 2000, 20, "reader2", 3, 'B', lck, 30);
+    rd3 = create(reader2, 2000, 20, "reader2", 3, 'D', lck, 25);
+    rd4 = create(reader2, 2000, 20, "reader2", 3, 'E', lck, 20);
+    rd5 = create(reader2, 2000, 20, "reader2", 3, 'F', lck, 20);
+    wr1 = create(writer2, 2000, 20, "writer2", 3, 'C', lck, 25);
+
+    kprintf("-start reader A, then sleep 1s. lock granted to reader A\n");
+    resume(rd1);
+    sleep(1);
+
+    kprintf("-start writer C, then sleep 1s. writer waits for the lock\n");
+    resume(wr1);
+    sleep(1);
+
+
+    kprintf("-start reader B, D, E. reader B is granted lock.\n");
+    resume(rd2);
+    resume(rd3);
+    resume(rd4);
+    resume(rd5);
+
+    sleep(15);
+    kprintf("output=%s\n", output2);
+    // ABD(ABD in arbitrary orders)CCEE
+    assert(mystrncmp(output2, "ABABDDCCEFFE", 12) == 0, "Test 5 FAILED\n");
+    kprintf("Test 2 OK\n");
+}
 
 void reader4(char* msg, int lck)
 {
@@ -357,6 +278,94 @@ void test4() {
     resume(rd1);
     sleep(10);
     return;
+}
+
+void writer6(char msg, int lck, int lprio)
+{
+    kprintf("  %c: to acquire lock\n", msg);
+    lock(lck, WRITE, lprio);
+    output2[count2++] = msg;
+    kprintf("  %c: acquired lock, sleep 3s\n", msg);
+    sleep(1);
+    output2[count2++] = msg;
+    kprintf("  %c: to release lock\n", msg);
+    releaseall(1, lck);
+}
+
+void writer6(char msg, int lck, int lprio)
+{
+    kprintf("  %c: to acquire lock\n", msg);
+    lock(lck, WRITE, lprio);
+    output2[count2++] = msg;
+    kprintf("  %c: acquired lock, sleep 3s\n", msg);
+    sleep(1);
+    output2[count2++] = msg;
+    kprintf("  %c: to release lock\n", msg);
+    releaseall(1, lck);
+}
+
+void test6() {
+    int	lck;
+    int	wr1, wr2;
+
+    kprintf("\nTest 1: Writer's can't share the rwlock\n");
+    lck = lcreate();
+    assert(lck != SYSERR, "Test 6 failed");
+    wr1 = create(writer6, 2000, 20, "writer6", 3, 'A', lck, 25);
+    wr2 = create(writer6, 2000, 20, "writer6", 3, 'B', lck, 25);
+
+    resume(wr1);
+    resume(wr2);
+
+    sleep(5);
+    kprintf('\n Test 6 OK');
+}
+
+void writer7(char msg, int lck, int lprio)
+{
+    kprintf("  %c: to acquire lock\n", msg);
+    lock(lck, WRITE, lprio);
+    output2[count2++] = msg;
+    kprintf("  %c: acquired lock, sleep 3s\n", msg);
+    sleep(1);
+    output2[count2++] = msg;
+    kprintf("  %c: to release lock\n", msg);
+    releaseall(1, lck);
+}
+
+
+void test7()
+{
+    count2 = 0;
+    int     lck;
+    int     rd1;
+    int     wr1, wr2;
+
+    kprintf("\nTest 7: write before read if, equal priorities");
+    lck = lcreate();
+    assert(lck != SYSERR, "Test 2 failed");
+
+
+    wr1 = create(writer7, 2000, 20, "writer7", 3, 'A', lck, 25);
+    rd1 = create(reader2, 2000, 20, "reader2", 3, 'B', lck, 20);
+    wr2 = create(writer7, 2000, 20, "writer7", 3, 'C', lck, 20);
+
+    kprintf("-start Writer A, then sleep 5s. lock granted to writer A\n");
+    resume(wr1);
+    sleep(1);
+
+    kprintf("-start reader B, then sleep 1s. reader waits for the lock\n");
+    resume(rd1);
+    sleep(1);
+
+    kprintf("-start writer C, writer C should acquire before reader B\n");
+    resume(wr2);
+
+    sleep(12);
+    kprintf("output=%s\n", output2);
+    // AACCBB
+    assert(mystrncmp(output2, "AACCBB", 6) == 0, "Test 7 FAILED\n");
+    kprintf("Test 7 OK\n");
 }
 
 
