@@ -12,7 +12,7 @@ int lock(int lockdescriptor, int type, int priority) {
 	disable(ps);
 	
 	if (isbadlock(lockdescriptor) || locks[lockdescriptor].lstatus == LFREE || (type != READ && type != WRITE)) { // either bad lock descriptor or the lock has not been created yet.
-		kprintf("\nComing inside error : %d, %d, %d\n", isbadlock(lockdescriptor), type, locks[lockdescriptor].lstatus == LFREE);
+		//kprintf("\nComing inside error\n");
 		restore(ps);
 		return SYSERR;
 	}
@@ -76,29 +76,29 @@ int is_writer_waiting(int lockdescriptor, int priority) {
 		}
 		last = q[last].qprev;
 	}
-	kprintf("waiting flag is: %d\n", should_wait);
+	//kprintf("waiting flag is: %d\n", should_wait);
 	return should_wait;
 }
 
 void set_priority_inheritance(int pid) {
 	struct pentry* pptr, *wpptr;
 	struct lentry* lptr;
-	kprintf("Coming to set_inh func: %d\n", pid);
+	//kprintf("Coming to set_inh func: %d\n", pid);
 	int prio,l_index,proc_index,curr,max_prio = -1000;
 	pptr = &proctab[pid];
 	for (l_index = 0; l_index < NLOCKS; l_index++) {
 		lptr = &locks[l_index];
 		if (lptr->proc_list[pid]) {
-			kprintf("Process: %d has lock: %d with lprio: %d\n", pid, l_index, lptr->lprio);
+			//kprintf("Process: %d has lock: %d with lprio: %d\n", pid, l_index, lptr->lprio);
 			curr = lptr->lprio;
 			if (curr > max_prio) {
 				max_prio = curr;
-				kprintf("Reaching here with maxprio: %d\n", max_prio);
+				//kprintf("Reaching here with maxprio: %d\n", max_prio);
 			}
 		}
 	}
 
-	kprintf("The maximum priority is: %d", max_prio);
+	//kprintf("The maximum priority is: %d", max_prio);
 
 	if (max_prio == NULL) {
 		pptr->pinh = 0;
@@ -137,7 +137,7 @@ void make_process_wait(int pid, int lockdescriptor, int type, int priority) {
 
 	for (proc_index = 0; proc_index < NPROC; proc_index++) {
 		if (lptr->proc_list[proc_index]) {
-			kprintf("Calling set_inh func for process: %d\n", proc_index);
+			//kprintf("Calling set_inh func for process: %d\n", proc_index);
 			ptr = &proctab[proc_index];
 			set_priority_inheritance(proc_index);
 		}

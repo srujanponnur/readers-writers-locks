@@ -55,7 +55,7 @@ SYSCALL kill(int pid)
 			lptr->lprio = get_max_in_queue(pptr->plock);
 			for (proc_index = 0; proc_index < NPROC; proc_index++) {
 				if (lptr->proc_list[proc_index]) {
-					kprintf("Calling set_inh func from kill for process: %d\n", proc_index);
+					//kprintf("Calling set_inh func from kill for process: %d\n", proc_index);
 					set_priority_inheritance(proc_index);
 				}
 			}

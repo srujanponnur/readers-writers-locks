@@ -40,17 +40,17 @@ int releaseall(int numlocks, int ldesc1) { // variable argument validation with 
 		if ((ltype == WRITE && lptr->is_writer == 0) || (ltype == READ && lptr->reader_count == 0)) {
 			
 			int result;
-			kprintf("Coming inside reacquisition\n");
+			//kprintf("Coming inside reacquisition\n");
 			get_last_in_queue(*lock, &result);
 			if (result != -1) { // if -1 no entries in the lock's queue, moving on.
 				if (q[result].qtype == WRITE) {
-					kprintf("Acquiring write lock...\n");
+					//kprintf("Acquiring write lock...\n");
 					acquire_lock(result, *lock, WRITE);
 				}
 				else if (q[result].qtype == READ) {
-					kprintf("Acquiring read lock...\n");
+					//kprintf("Acquiring read lock...\n");
 					get_type(*lock, &writer, WRITE);
-					kprintf("In read, does writer exist: %d\n", writer);
+					//kprintf("In read, does writer exist: %d\n", writer);
 					if (writer != -1) { // there is a writer existing in the queue
 						if (q[result].qkey == q[writer].qkey) { /* writer and reader has same priority*/
 							r_waittime = ctr1000 - q[result].qkey;
@@ -82,7 +82,7 @@ int releaseall(int numlocks, int ldesc1) { // variable argument validation with 
 						}
 					}
 					else { /* no writers in queue, all readers in queue can acquire the lock*/
-						kprintf("No writer in queue, just acquiring this\n");
+						//kprintf("No writer in queue, just acquiring this\n");
 						print_queue(*lock);
 						entry_count = get_queue_count(*lock);
 						for (q_index = 0; q_index < entry_count; q_index++) {
@@ -105,7 +105,7 @@ int releaseall(int numlocks, int ldesc1) { // variable argument validation with 
 void acquire_lock(int result, int lockdescriptor, int type) {
 	struct lentry* lptr;
 	struct pentry* pptr;
-	kprintf("Coming to acquire lock: %d\n", lockdescriptor);
+	//kprintf("Coming to acquire lock: %d\n", lockdescriptor);
 	pptr = &proctab[result];
 	lptr = &locks[lockdescriptor];
 	lptr->ltype = type;
