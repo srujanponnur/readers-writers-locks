@@ -359,35 +359,13 @@ void test7()
 
 void test8() {
     int     lck;
-    int     rd1, rd2;
-    int     wr1, wr2,i;
+    int     rd1;
+    int     wr1;
     kprintf("\nTest 8: ldelete case after process kill\n");
     lck = lcreate();
-    kprintf("The lock descriptor is: %d\n", lck);
     assert(lck != SYSERR, "Test 4 failed");
-    rd1 = create(reader2, 2000, 20, "reader8", 3, 'A', lck, 25);
+    rd1 = create(reader1, 2000, 20, "reader8", 3, 'A', lck, 25);
     wr1 = create(writer2, 2000, 20, "writer8", 3, 'B', lck, 20);
-    //kprintf("-start Writer A, then sleep 5s. lock granted to writer A\n");
-    //kprintf("-start reader B, then sleep 1s. reader waits for the lock\n");
-    resume(rd1);
-    resume(wr1);
-    //sleep(5); //uncomment this to test change order of lock acquisition
-    ldelete(lck);
-    kill(wr1);
-    locks[lck].lstatus = LINIT;
-    wr1 = create(reader2, 2000, 20, "writer8", 3, 'B', lck, 20);
-    resume(wr1);
-    kprintf("-start writer C, writer C should acquire before reader B\n");
-    resume(wr2);
-    /*rd1 = create(reader4, 2000, 25, "reader8", 2, 'A', lck, 20);
-    wr1 = create(writer2, 2000, 25, "writer8", 2, 'B', lck, 25);
-    resume(rd1);
-    resume(rd2);
-    ldelete(lck);
-    kill(wr1);
-    locks[lck].lstatus = LINIT;
-    rd2 = create(writer2, 2000, 25, "reader8", 2, 'C', lck, 25);
-    resume(rd2);*/
     sleep(10);
     return;
 }
