@@ -93,6 +93,7 @@ void set_priority_inheritance(int pid) {
 			curr = lptr->lprio;
 			if (max_prio == NULL || curr > max_prio) {
 				max_prio = curr;
+				kprintf("Reaching here with maxprio: %d\n", max_prio);
 			}
 		}
 	}
