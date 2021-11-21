@@ -391,6 +391,10 @@ void test8() {
     assert(lck != SYSERR, "Test 4 failed");
     rd1 = create(reader2, 2000, 20, "reader2", 3, 'A', lck, 20);
     wr1 = create(writer2, 2000, 20, "writer2", 3, 'C', lck, 25);
+    ldelete(lck);
+    locks[lck].lstatus = LINIT;
+    kill(wr1);
+    wr1 = create(writer2, 2000, 20, "writer2", 3, 'C', lck, 25);
     resume(rd1);
     resume(wr1);
     sleep(10);
