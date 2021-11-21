@@ -60,7 +60,7 @@ void test1()
 }
 
 /*----------------------------------Test 2---------------------------*/
-char output2[10];
+char output2[12];
 int count2;
 void reader2(char msg, int lck, int lprio)
 {
