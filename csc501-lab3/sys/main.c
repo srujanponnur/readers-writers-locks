@@ -373,6 +373,7 @@ void test8() {
     resume(wr1);
     //sleep(5); //uncomment this to test change order of lock acquisition
     ldelete(lck);
+    kill(wr1);
     locks[lck].lstatus = LINIT;
     wr1 = create(reader2, 2000, 20, "writer8", 3, 'B', lck, 20);
     resume(wr1);
