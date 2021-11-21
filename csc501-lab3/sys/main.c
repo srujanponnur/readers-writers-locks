@@ -200,7 +200,7 @@ void test5()
     int     rd1, rd2, rd3, rd4, rd5;
     int     wr1;
 
-    kprintf("\nTest 2: wait on locks with priority. Expected order of"
+    kprintf("\nTest 5: wait on locks with priority. Expected order of"
         " lock acquisition is: reader A, reader B, reader D, writer C & reader E\n");
     lck = lcreate();
     assert(lck != SYSERR, "Test 2 failed");
@@ -240,6 +240,7 @@ void reader4(char* msg, int lck)
     kprintf("  %s: to acquire lock\n", msg);
     lock(lck, READ, DEFAULT_LOCK_PRIO);
     kprintf("  %s: acquired lock\n", msg);
+    sleep(1);
     kprintf("  %s: to release lock\n", msg);
     releaseall(1, lck);
 }
@@ -295,7 +296,7 @@ void test6() {
     int	lck;
     int	wr1, wr2;
 
-    kprintf("\nTest 1: Writer's can't share the rwlock\n");
+    kprintf("\nTest 6: Writer's can't share the rwlock\n");
     lck = lcreate();
     assert(lck != SYSERR, "Test 6 failed");
     wr1 = create(writer6, 2000, 20, "writer6", 3, 'A', lck, 25);
@@ -356,19 +357,42 @@ void test7()
 }
 
 
+void test8() {
+    int     lck;
+    int     rd1, rd2;
+    int     wr1, i;
+    kprintf("\nTest 8: ldelete case after process kill\n");
+    lck = lcreate();
+    kprintf("The lock descriptor is: %d\n", lck);
+    assert(lck != SYSERR, "Test 4 failed");
+    rd1 = create(reader4, 2000, 25, "reader4", 2, "reader A", lck);
+    wr1 = create(writer2, 2000, 25, "reader4", 2, "Writer B", lck);
+    resume(rd1);
+    resume(rd2);
+    ldelete(lck);
+    kill(wr1);
+    locks[lck].lstatus = LINIT;
+    rd2 = create(writer2, 2000, 25, "reader4", 2, "Writer C", lck);
+    resume(rd2);
+    sleep(10);
+    return;
+}
+
+
 int main()
 {
     /* These test cases are only used for test purpose.
      * The provided results do not guarantee your correctness.
      * You need to read the PA2 instruction carefully.
      */
-    test1();
-    test2();
-    test3();
+    //test1();
+    //test2();
+    //test3();
     //test4();
     //test5();
     //test6();
     //test7();
+    test8();
 
     /* The hook to shutdown QEMU for process-like execution of XINU.
      * This API call exists the QEMU process.
