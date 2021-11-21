@@ -12,7 +12,7 @@ int lock(int lockdescriptor, int type, int priority) {
 	disable(ps);
 	
 	if (isbadlock(lockdescriptor) || locks[lockdescriptor].lstatus == LFREE || (type != READ || type != WRITE)) { // either bad lock descriptor or the lock has not been created yet.
-		kprintf("Coming inside error\n");
+		kprintf("\nComing inside error : %c\n", locks[lockdescriptor].lstatus);
 		restore(ps);
 		return SYSERR;
 	}
