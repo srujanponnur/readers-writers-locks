@@ -86,7 +86,7 @@ int releaseall(int numlocks, int ldesc1) { // variable argument validation with 
 						print_queue(*lock);
 						entry_count = get_queue_count(*lock);
 						for (q_index = 0; q_index < entry_count; q_index++) {
-							temp = get_last_in_queue(*lock,&temp);
+							get_last_in_queue(*lock,&temp);
 							acquire_lock(temp, *lock, READ);
 						}
 					}
