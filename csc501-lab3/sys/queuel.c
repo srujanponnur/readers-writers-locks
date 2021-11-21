@@ -22,6 +22,37 @@ int insert_lq(int proc, int head, int key, int ltype) {
 	return(OK);
 }
 
+void print_queue(int lockdescriptor) {
+	struct lentry* lptr;
+	int head, tail, last;
+	lptr = &locks[lockdescriptor];
+	head = lptr->lqhead;
+	tail = lptr->lqtail;
+	last = q[tail].qprev;
+	kprintf("The queue entries in lock: %d are\n", lockdescriptor);
+	while (last != head) {
+		kprintf("%d ", last);
+		last = q[last].qprev;
+	}
+	kprintf("\n");
+	return;
+}
+
+int get_queue_count(int lockdescriptor) {
+	struct lentry* lptr;
+	int head, tail, last, count = 0;
+	lptr = &locks[lockdescriptor];
+	head = lptr->lqhead;
+	tail = lptr->lqtail;
+	last = q[tail].qprev;
+	while (last != head) {
+		count++;
+		last = q[last].qprev;
+	}
+	kprintf("\nThe entries in the lock queue: %d is : %d\n", count);
+	return count;
+}
+
 
 //
 //int enqueue_l(int item, int tail) {

@@ -37,6 +37,8 @@ extern	int	nextqueue;
 /* ANSI compliant function prototypes */
 
 extern int insert_lq(int proc, int head, int key, int ltype);
+extern void print_queue(int);
+extern int get_queue_count(int);
 
 int enqueue(int item, int tail);
 int dequeue(int item);

@@ -12,7 +12,7 @@ int releaseall(int numlocks, int ldesc1) { // variable argument validation with 
 	STATWORD ps;
 	disable(ps);
 
-	int l_index, reader, writer, *lock, ltype, temp, waitprio, q_head, r_waittime, w_waittime;
+	int l_index, reader, writer, *lock, ltype, temp, waitprio, q_head, r_waittime, w_waittime, entry_count, q_index;
 	int pid = currpid;
 	struct lentry* lptr;
 	lock = &ldesc1;
@@ -81,12 +81,13 @@ int releaseall(int numlocks, int ldesc1) { // variable argument validation with 
 							}
 						}
 					}
-					else { /* no writers in queue, all readers in queue acquire the lock*/
+					else { /* no writers in queue, all readers in queue can acquire the lock*/
 						kprintf("No writer in queue, just acquiring this\n");
-						temp = result;
-						while (temp != q_head) {
+						print_queue(*lock);
+						entry_count = get_queue_count(*lock);
+						for (q_index = 0; q_index < entry_count; q_index++) {
+							temp = get_last_in_queue(*lock,&temp);
 							acquire_lock(temp, *lock, READ);
-							temp = q[temp].qprev;
 						}
 					}
 				}
