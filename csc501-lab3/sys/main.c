@@ -369,7 +369,7 @@ void test7()
 }
 
 
-int main()
+void main()
 {
     /* These test cases are only used for test purpose.
      * The provided results do not guarantee your correctness.
