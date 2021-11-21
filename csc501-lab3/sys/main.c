@@ -364,7 +364,7 @@ void reader8(char msg, int lck, int lprio)
     lock(lck, READ, lprio);
     output2[count2++] = msg;
     kprintf("  %c: acquired lock, sleep 3s\n", msg);
-    sleep(3);
+    sleep(5);
     output2[count2++] = msg;
     kprintf("  %c: to release lock\n", msg);
     releaseall(1, lck);
@@ -393,11 +393,11 @@ void test8() {
     wr1 = create(writer2, 2000, 20, "writer2", 3, 'C', lck, 25);
     resume(rd1);
     resume(wr1);
-    ldelete(lck);
+   /* ldelete(lck);
     locks[lck].lstatus = LINIT;
     kill(wr1);
     wr1 = create(writer2, 2000, 20, "writer2", 3, 'C', lck, 25);
-    resume(wr1);
+    resume(wr1);*/
     sleep(20);
     kprintf("TEST 8 OK");
     return;
