@@ -207,15 +207,12 @@ void get_type(int lockdescriptor, int *result, int type) {
 	int last, head;
 	*result = -1;
 	if (type != READ && type != WRITE)  {
-		kprintf("Reaching here\n");
 		restore(ps);
 		return;
 	}
 	lptr = &locks[lockdescriptor];
 	head = lptr->lqhead;
-	kprintf("Reaching here\n");
 	if (nonempty(head)) {
-		kprintf("Reaching here too!\n");
 		last = q[lptr->lqtail].qprev;
 		while (last != head) {
 			if (q[last].qtype == type) {
