@@ -11,7 +11,7 @@ int lock(int lockdescriptor, int type, int priority) {
 	STATWORD ps;
 	disable(ps);
 	
-	if (isbadlock(lockdescriptor) || locks[lockdescriptor].lstatus == LFREE || (type != READ || type != WRITE)) { // either bad lock descriptor or the lock has not been created yet.
+	if (isbadlock(lockdescriptor) || locks[lockdescriptor].lstatus == LFREE || (type != READ && type != WRITE)) { // either bad lock descriptor or the lock has not been created yet.
 		kprintf("\nComing inside error : %d, %d, %d\n", isbadlock(lockdescriptor), type, locks[lockdescriptor].lstatus == LFREE);
 		restore(ps);
 		return SYSERR;
@@ -76,6 +76,7 @@ int is_writer_waiting(int lockdescriptor, int priority) {
 		}
 		last = q[last].qprev;
 	}
+	kprintf("waiting flag is: %d\n", should_wait);
 	return should_wait;
 }
 
