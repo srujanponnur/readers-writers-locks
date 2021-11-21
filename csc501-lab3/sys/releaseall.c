@@ -43,6 +43,7 @@ int releaseall(int numlocks, int ldesc1) { // variable argument validation with 
 			get_last_in_queue(*lock, &result);
 			if (result != -1) { // if -1 no entries in the lock's queue, moving on.
 				if (q[result].qtype == WRITE) {
+					kprintf("Releasing write lock, calling acquire\n");
 					acquire_lock(result, *lock, WRITE);
 				}
 				else if (q[result].qtype == READ) {
@@ -99,6 +100,7 @@ int releaseall(int numlocks, int ldesc1) { // variable argument validation with 
 void acquire_lock(int result, int lockdescriptor, int type) {
 	struct lentry* lptr;
 	struct pentry* pptr;
+	kprintf("Coming to acquire lock: %d\n", result);
 	pptr = &proctab[result];
 	lptr = &locks[lockdescriptor];
 	lptr->ltype = type;
