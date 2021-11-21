@@ -349,7 +349,7 @@ void test7()
     kprintf("-start writer C, writer C should acquire before reader B\n");
     resume(wr2);
 
-    sleep(12);
+    sleep(20);
     kprintf("output=%s\n", output2);
     // AACCBB
     assert(mystrncmp(output2, "AACCBB", 6) == 0, "Test 7 FAILED\n");
