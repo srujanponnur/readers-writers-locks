@@ -49,7 +49,7 @@ int get_queue_count(int lockdescriptor) {
 		count++;
 		last = q[last].qprev;
 	}
-	kprintf("\nThe entries in the lock queue: %d is : %d\n", count);
+	kprintf("\nThe count in the lock queue: %d\n", count);
 	return count;
 }
 
