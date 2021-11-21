@@ -64,9 +64,10 @@ int releaseall(int numlocks, int ldesc1) { // variable argument validation with 
 								temp = result;
 								waitprio = q[result].qkey;
 								while (q[temp].qkey == waitprio && temp!= q_head) {
-									r_waittime = ctr1000 - q[temp].qkey;
-									w_waittime = ctr1000 - q[writer].qkey;
-									if ((w_waittime - r_waittime) > 1000) {
+									r_waittime = ctr1000 - q[temp].added_at;
+									w_waittime = ctr1000 - q[writer].added_at;
+									kprintf("The difference is: %d\n", (r_waittime - w_waittime));
+									if ((r_waittime - w_waittime) > 1000) {
 										acquire_lock(temp, *lock, READ);
 									}
 									temp = q[temp].qprev;
