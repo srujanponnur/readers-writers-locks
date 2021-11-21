@@ -209,16 +209,17 @@ void test4() {
     int     rd1, rd2;
     int     wr1,i;
     kprintf("\nTest 4: ldelete case\n");
-    for (i = 0; i < 46; i++) {
+   /* for (i = 0; i < 40; i++) {
         lck = lcreate();
-    }
+    }*/
     lck = lcreate();
     kprintf("The lock descriptor is: %d\n", lck);
     assert(lck != SYSERR, "Test 4 failed");
     rd1 = create(reader4, 2000, 25, "reader4", 2, "reader A", lck);
     rd2 = create(reader4, 2000, 25, "reader4", 2, "reader B", lck);
     ldelete(lck);
-    lck = lcreate();
+    locks[lck].lstatus = LINIT;
+    //lck = lcreate();
     kprintf("The new lock descriptor is: %d\n", lck);
     rd1 = create(reader4, 2000, 25, "reader4", 2, "reader A", lck);
 }
