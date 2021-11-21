@@ -366,6 +366,8 @@ void test8() {
     assert(lck != SYSERR, "Test 4 failed");
     rd1 = create(reader1, 2000, 20, "reader8", 3, 'A', lck, 25);
     wr1 = create(writer2, 2000, 20, "writer8", 3, 'B', lck, 20);
+    resume(rd1);
+    resume(wr1);
     sleep(10);
     return;
 }
