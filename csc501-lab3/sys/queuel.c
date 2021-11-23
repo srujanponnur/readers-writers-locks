@@ -30,9 +30,9 @@ void print_queue(int lockdescriptor) {
 	head = lptr->lqhead;
 	tail = lptr->lqtail;
 	last = q[tail].qprev;
-	//kprintf("The queue entries in lock: %d are\n", lockdescriptor);
+	kprintf("The queue entries in lock: %d are\n", lockdescriptor);
 	while (last != head) {
-		//kprintf("%d ", last);
+		kprintf("%d ", last);
 		last = q[last].qprev;
 	}
 	kprintf("\n");
