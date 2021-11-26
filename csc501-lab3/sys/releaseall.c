@@ -67,7 +67,7 @@ int releaseall(int numlocks, int ldesc1) { // variable argument validation with 
 									r_waittime = ctr1000 - q[temp].added_at;
 									w_waittime = ctr1000 - q[writer].added_at;
 									//kprintf("The difference is: %d\n", (r_waittime - w_waittime));
-									if ((r_waittime - w_waittime) > 1000) {
+									if ((r_waittime - w_waittime) > 1000 && q[temp].qtype == READ) {
 										acquire_lock(temp, *lock, READ);
 									}
 									temp = q[temp].qprev;
