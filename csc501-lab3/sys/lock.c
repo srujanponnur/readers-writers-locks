@@ -104,6 +104,9 @@ void set_priority_inheritance(int pid) {
 	if (max_prio == NULL) {
 		pptr->pinh = 0;
 	}
+	else if (max_prio <= pptr->pprio) {
+		pptr->pinh = 0;
+	}
 	else {
 		pptr->pinh = max_prio;
 	}

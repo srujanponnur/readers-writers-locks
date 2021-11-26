@@ -353,10 +353,10 @@ void test7()
     rd2 = create(reader2, 2000, 10, "reader2", 3, 'C', lck, 20);
     wr2 = create(writer7, 2000, 20, "writer7", 3, 'D', lck, 20);
     rd3 = create(reader2, 2000, 20, "reader2", 3, 'E', lck, 20);
-    rd4 = create(reader2, 2000, 20, "reader2", 3, 'E', lck, 20);
+    rd4 = create(reader2, 2000, 20, "reader2", 3, 'F', lck, 20);
 
-    //kprintf("-start Writer A, then sleep 5s. lock granted to writer A\n");
-    //resume(wr1);
+    kprintf("-start Writer A, then sleep 5s. lock granted to writer A\n");
+    resume(wr1);
 
     kprintf("-start reader B, then sleep 1s. reader waits for the lock\n");
     resume(rd1);
@@ -367,10 +367,10 @@ void test7()
     resume(rd3);
     resume(rd4);
 
-    //sleep(25);
+    sleep(10);
     kprintf("output=%s\n", output2);
     // AACCBB
-    assert(mystrncmp(output2, "AACCBB", 6) == 0, "Test 7 FAILED\n");
+    assert(mystrncmp(output2, "AABBCCDDEFEF", 6) == 0, "Test 7 FAILED\n");
     kprintf("Test 7 OK\n");
 }
 
@@ -527,15 +527,15 @@ int main()
      * The provided results do not guarantee your correctness.
      * You need to read the PA2 instruction carefully.
      */
-     /*test1();
+     test1();
      test2();
-     test3();*/
-     /* test4();
-      test5();
-      test6();*/
-      test7();
-     // test8();
-    //test9();
+     test3();
+     test4();
+     test5();
+     test6();
+     test7();
+     test8();
+     test9();
 
     /* The hook to shutdown QEMU for process-like execution of XINU.
      * This API call exists the QEMU process.
