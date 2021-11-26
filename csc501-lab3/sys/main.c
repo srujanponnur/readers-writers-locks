@@ -355,14 +355,14 @@ void test7()
     rd3 = create(reader2, 2000, 20, "reader2", 3, 'E', lck, 20);
     rd4 = create(reader2, 2000, 20, "reader2", 3, 'E', lck, 20);
 
-    kprintf("-start Writer A, then sleep 5s. lock granted to writer A\n");
-    resume(wr1);
+    //kprintf("-start Writer A, then sleep 5s. lock granted to writer A\n");
+    //resume(wr1);
 
-    kprintf("-start reader B, then sleep 1s. reader waits for the lock\n");
-    resume(rd1);
-    resume(rd2);
-    sleep(2); //uncomment this to test change order of lock acquisition
-    kprintf("-start writer C, writer C should acquire before reader B\n");
+    //kprintf("-start reader B, then sleep 1s. reader waits for the lock\n");
+    //resume(rd1);
+    //resume(rd2);
+    //sleep(2); //uncomment this to test change order of lock acquisition
+    //kprintf("-start writer C, writer C should acquire before reader B\n");
     resume(wr2);
     resume(rd3);
     resume(rd4);
