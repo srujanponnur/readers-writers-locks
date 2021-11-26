@@ -64,12 +64,10 @@ int releaseall(int numlocks, int ldesc1) { // variable argument validation with 
 								temp = result;
 								waitprio = q[result].qkey;
 								while (q[temp].qkey == waitprio && temp!= q_head) {
-									kprintf("Coming here!\n");
 									r_waittime = ctr1000 - q[temp].added_at;
 									w_waittime = ctr1000 - q[writer].added_at;
 									//kprintf("The difference is: %d\n", (r_waittime - w_waittime));
 									if ((r_waittime - w_waittime) > 1000 && q[temp].qtype == READ) {
-										kprintf("Choosing the reader process: %d\n", temp);
 										acquire_lock(temp, *lock, READ);
 									}
 									temp = q[temp].qprev;
