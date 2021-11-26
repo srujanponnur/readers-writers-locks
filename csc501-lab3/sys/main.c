@@ -516,10 +516,10 @@ int main()
      test3();*/
      /* test4();
       test5();
-      test6();
+      test6();*/
       test7();
-      test8();*/
-    test9();
+     // test8();
+    //test9();
 
     /* The hook to shutdown QEMU for process-like execution of XINU.
      * This API call exists the QEMU process.
