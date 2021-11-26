@@ -309,6 +309,20 @@ void test6() {
     kprintf('\n Test 6 OK');
 }
 
+void reader7(char msg, int lck, int lprio)
+{
+    int     ret;
+
+    kprintf("  %c: to acquire lock\n", msg);
+    lock(lck, READ, lprio);
+    output2[count2++] = msg;
+    kprintf("  %c: acquired lock, sleep 3s\n", msg);
+    sleep(7);
+    output2[count2++] = msg;
+    kprintf("  %c: to release lock\n", msg);
+    releaseall(1, lck);
+}
+
 void writer7(char msg, int lck, int lprio)
 {
     kprintf("  %c: to acquire lock\n", msg);
@@ -335,7 +349,7 @@ void test7()
 
 
     wr1 = create(writer7, 2000, 20, "writer7", 3, 'A', lck, 25);
-    rd1 = create(reader2, 2000, 20, "reader2", 3, 'B', lck, 20);
+    rd1 = create(reader7, 2000, 20, "reader2", 3, 'B', lck, 20);
     rd2 = create(reader2, 2000, 20, "reader2", 3, 'C', lck, 20);
     wr2 = create(writer7, 2000, 20, "writer7", 3, 'D', lck, 20);
     rd3 = create(reader2, 2000, 20, "reader2", 3, 'E', lck, 20);
