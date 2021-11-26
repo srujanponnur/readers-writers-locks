@@ -156,10 +156,12 @@ void reset_inherited_priority(int pid) {
 	if (max == NULL) {
 		pptr->pinh = 0;
 	}
+	else if (max <= pptr->pprio) {
+		pptr->pinh = 0;
+	}
 	else {
 		pptr->pinh = max;
 	}
-
 	restore(ps);
 	return;
 }

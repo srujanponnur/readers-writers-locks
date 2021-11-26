@@ -262,7 +262,7 @@ void reader5(char* msg, int lck)
 void test4() {
     int     lck;
     int     rd1, rd2;
-    int     wr1,i;
+    int     wr1, i;
     kprintf("\nTest 4: ldelete case\n");
     lck = lcreate();
     kprintf("The lock descriptor is: %d\n", lck);
@@ -341,7 +341,7 @@ void test7()
 
     kprintf("-start Writer A, then sleep 5s. lock granted to writer A\n");
     resume(wr1);
-   
+
     kprintf("-start reader B, then sleep 1s. reader waits for the lock\n");
     resume(rd1);
     resume(rd2);
@@ -392,14 +392,114 @@ void test8() {
     wr1 = create(writer2, 2000, 20, "writer2", 3, 'B', lck, 25);
     resume(wr1);
     resume(rd1);
-   /* ldelete(lck);
-    locks[lck].lstatus = LINIT;
-    kill(wr1);
-    wr1 = create(writer2, 2000, 20, "writer2", 3, 'C', lck, 25);
-    resume(wr1);*/
+    /* ldelete(lck);
+     locks[lck].lstatus = LINIT;
+     kill(wr1);
+     wr1 = create(writer2, 2000, 20, "writer2", 3, 'C', lck, 25);
+     resume(wr1);*/
     sleep(20);
     kprintf("TEST 8 OK");
     return;
+}
+
+void reader9(char* msg, int lck)
+{
+    int     ret;
+
+    kprintf("  %s: to acquire lock\n", msg);
+    lock(lck, READ, DEFAULT_LOCK_PRIO);
+    kprintf("  %s: acquired lock\n", msg);
+
+    sleep(2);
+    kprintf("  %s: to release lock\n", msg);
+    releaseall(1, lck);
+}
+
+void reader10(char* msg, int lck)
+{
+    int     ret;
+
+    kprintf("  %s: to acquire lock\n", msg);
+    lock(lck, READ, 15);
+    kprintf("  %s: acquired lock\n", msg);
+
+    sleep(2);
+    kprintf("  %s: to release lock\n", msg);
+    releaseall(1, lck);
+}
+
+void writer10(char* msg, int lck)
+{
+    kprintf("  %s: to acquire lock\n", msg);
+    lock(lck, WRITE, 15);
+    kprintf("BIG WRITER  %s: acquired lock, sleep 10s\n", msg);
+    //sleep (10);
+    kprintf("  %s: to release lock\n", msg);
+    releaseall(1, lck);
+}
+
+
+void writer9(char* msg, int lck)
+{
+    kprintf("  %s: to acquire lock\n", msg);
+    lock(lck, WRITE, DEFAULT_LOCK_PRIO);
+    kprintf("  %s: acquired lock, sleep 10s\n", msg);
+    //sleep (10);
+    kprintf("  %s: to release lock\n", msg);
+    releaseall(1, lck);
+}
+
+void writerbig(char* msg, int lck)
+{
+    kprintf("  %s: to acquire lock\n", msg);
+    lock(lck, WRITE, 50);
+    kprintf("BIG WRITER  %s: acquired lock, sleep 10s\n", msg);
+    sleep(10);
+    kprintf("  %s: to release lock\n", msg);
+    releaseall(1, lck);
+}
+
+void test9() {
+    int lck1, lck2, lck3;
+    int r1, r2, r3, r4, r5, r6, r7, wr1, wr2, wr3, wr4;
+
+    int wrmain;
+    kprintf("Many readers, writers. Check capture of all readers with prio not less than writer, time difference 1 sec case. Change values accordingly\n");
+    lck1 = lcreate();
+    assert(lck1 != SYSERR, "Test 6 failed");
+
+    wrmain = create(writerbig, 2000, 70, "writerMAIN", 2, "writer MAIN", lck1);
+
+    kprintf("Going to start building that wait lock queue\n");
+    r1 = create(reader9, 2000, 40, "reader1", 2, "reader A", lck1);
+    r2 = create(reader9, 2000, 40, "reader2", 2, "reader B", lck1);
+    r3 = create(reader9, 2000, 40, "reader3", 2, "reader C", lck1);
+    r4 = create(reader9, 2000, 40, "reader4", 2, "reader D", lck1);
+
+    wr1 = create(writer9, 2000, 40, "writer1", 2, "writer A", lck1);
+
+    r5 = create(reader9, 2000, 40, "reader5", 2, "reader E", lck1);
+
+    r6 = create(reader10, 2000, 40, "reader6", 2, "reader F", lck1);
+
+    wr2 = create(writer10, 2000, 40, "writer2", 2, "writer B", lck1);
+
+    r7 = create(reader10, 2000, 40, "reader7", 2, "reader G", lck1);
+
+
+    resume(wrmain);
+    resume(r1);
+    resume(r2);
+    resume(r3);
+    resume(r4);
+    sleep(5);
+    resume(wr1);
+    resume(r5);
+    resume(r6);
+    resume(wr2);
+    resume(r7);
+
+    sleep(20);
 }
 
 
@@ -409,14 +509,15 @@ int main()
      * The provided results do not guarantee your correctness.
      * You need to read the PA2 instruction carefully.
      */
-    test1();
-    test2();
-    test3();
-   /* test4();
-    test5();
-    test6();
-    test7();
-    test8();*/
+     /*test1();
+     test2();
+     test3();*/
+     /* test4();
+      test5();
+      test6();
+      test7();
+      test8();*/
+    test9();
 
     /* The hook to shutdown QEMU for process-like execution of XINU.
      * This API call exists the QEMU process.
