@@ -349,7 +349,7 @@ void test7()
 
 
     wr1 = create(writer7, 2000, 20, "writer7", 3, 'A', lck, 25);
-    rd1 = create(reader7, 2000, 10, "reader2", 3, 'B', lck, 20);
+    rd1 = create(reader2, 2000, 10, "reader2", 3, 'B', lck, 20);
     rd2 = create(reader2, 2000, 10, "reader2", 3, 'C', lck, 20);
     wr2 = create(writer7, 2000, 20, "writer7", 3, 'D', lck, 20);
     rd3 = create(reader2, 2000, 20, "reader2", 3, 'E', lck, 20);
@@ -367,7 +367,7 @@ void test7()
     resume(rd3);
     resume(rd4);
 
-    sleep(10);
+    sleep(20);
     kprintf("output=%s\n", output2);
     // AACCBB
     assert(mystrncmp(output2, "AABBCCDDEFEF", 6) == 0, "Test 7 FAILED\n");
