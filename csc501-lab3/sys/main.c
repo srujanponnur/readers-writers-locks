@@ -346,7 +346,7 @@ void test7()
     kprintf("-start reader B, then sleep 1s. reader waits for the lock\n");
     resume(rd1);
     resume(rd2);
-    sleep(5); //uncomment this to test change order of lock acquisition
+    //sleep(5); //uncomment this to test change order of lock acquisition
     kprintf("-start writer C, writer C should acquire before reader B\n");
     resume(wr2);
     resume(rd3);
