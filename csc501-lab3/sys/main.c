@@ -349,8 +349,8 @@ void test7()
 
 
     wr1 = create(writer7, 2000, 20, "writer7", 3, 'A', lck, 25);
-    rd1 = create(reader7, 2000, 20, "reader2", 3, 'B', lck, 20);
-    rd2 = create(reader2, 2000, 20, "reader2", 3, 'C', lck, 20);
+    rd1 = create(reader7, 2000, 10, "reader2", 3, 'B', lck, 20);
+    rd2 = create(reader2, 2000, 10, "reader2", 3, 'C', lck, 20);
     wr2 = create(writer7, 2000, 20, "writer7", 3, 'D', lck, 20);
     rd3 = create(reader2, 2000, 20, "reader2", 3, 'E', lck, 20);
     rd4 = create(reader2, 2000, 20, "reader2", 3, 'E', lck, 20);
@@ -358,16 +358,16 @@ void test7()
     //kprintf("-start Writer A, then sleep 5s. lock granted to writer A\n");
     //resume(wr1);
 
-    //kprintf("-start reader B, then sleep 1s. reader waits for the lock\n");
-    //resume(rd1);
-    //resume(rd2);
-    //sleep(2); //uncomment this to test change order of lock acquisition
-    //kprintf("-start writer C, writer C should acquire before reader B\n");
+    kprintf("-start reader B, then sleep 1s. reader waits for the lock\n");
+    resume(rd1);
+    resume(rd2);
+    sleep(2); //uncomment this to test change order of lock acquisition
+    kprintf("-start writer C, writer C should acquire before reader B\n");
     resume(wr2);
     resume(rd3);
     resume(rd4);
 
-    sleep(25);
+    //sleep(25);
     kprintf("output=%s\n", output2);
     // AACCBB
     assert(mystrncmp(output2, "AACCBB", 6) == 0, "Test 7 FAILED\n");
